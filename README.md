@@ -26,7 +26,7 @@ M-Gauge renders configurable gauge screens with LVGL, receives ECU data over CAN
 ### ECU Support
 * CAN-Bus communication between ECU and M-Gauge
 * Currently supports **MaxxECU standalone ECUs**
-* Display any available ECU parameter in v1.3 canbus protocol
+* Display any available ECU parameter in MaxxECU v1.3 canbus protocol
  * Should just as well work with other ECU's that stream data on CAN-Bus
 * **User configurable CAN Message mapping**
 * Automatic scaling of engine data to match selected gauge type
