@@ -1,0 +1,15 @@
+M-Gauge Non-Commercial License v1.0
+
+Copyright (c) 2026 Mika Pesonen
+
+Permission is granted to use and distribute unmodified copies of the M-Gauge software for personal and non-commercial purposes.
+
+Commercial use, resale, sublicensing, distribution as part of a commercial product, or use in products or services offered for sale requires prior written permission from the copyright holder.
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, ARISING FROM,OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
