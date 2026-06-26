@@ -55,6 +55,8 @@ M-Gauge renders configurable gauge screens with LVGL, receives ECU data over CAN
 ### Favorites
 
 * Each screen can store up to **10 favorite parameters** for quick access.
+<img width="400" height="400" alt="PXL_20260626_120639874 MP" src="https://github.com/user-attachments/assets/f340b90c-bf6a-4c16-9b98-c8294e366f90" />
+
 
 ## Alarm limits
 * User configurable minimum/maximum alarm limits
@@ -74,29 +76,40 @@ Choose from **6 different screen layouts**:
 
 * Classic analog single gauge display.
 
+<img width="400" height="400" alt="PXL_20260626_120622484 MP" src="https://github.com/user-attachments/assets/455af88a-bbed-49db-b852-671e734ac1fe" />
+
 ### (2) Dual Analog Gauge
 
 * Display two parameters in classic analog gauge simultaneously.
+<img width="400" height="400" alt="PXL_20260626_120612946 MP" src="https://github.com/user-attachments/assets/89491109-5dd1-4eb1-a1b9-7f22cbd8b54d" />
 
 ### (3) Analog Gauge + Status Display
 
 * Analog Gauge combined with ECU status and warning information.
+<img width="400" height="400" alt="PXL_20260626_120604008 MP" src="https://github.com/user-attachments/assets/3a9e7514-996c-4f0a-91d9-98bf92fb2914" />
 
 ### (4) Multi-Data Dashboard
 
 * Display up to **8 parameters** on a single screen with bar type visualization.
+<img width="400" height="400" alt="PXL_20260626_120556492 MP" src="https://github.com/user-attachments/assets/3d8eccc8-5856-4be4-b223-75f0bdd9ce03" />
+
 
 ### (5) Rolling Data Visualizer
 
 * Real-time graphing of **two user-selected parameters**.
+<img width="400" height="400" alt="b615b8e4-89d6-463c-8f92-b31a4742bee2-copied-media~2" src="https://github.com/user-attachments/assets/3b3d25d6-e3f8-4aa0-9c9e-98f9f245f4d5" />
+
 
 ### (6) Numeric Display simple gauge
 
 * Large numerical value display with two optional visualization bars for maximum readability. Gear, lambda, etc..
 * Custom, userdefined colors
+<img width="400" height="400" alt="d33cd985-7a68-41cb-8c29-f30157df4d9a-copied-media~2" src="https://github.com/user-attachments/assets/7c5bbac4-22c7-4e5e-bf8b-c3f63feb2057" />
+
 
 ### (7) On Screen Gauge Setup
 * Easy dropdown configuration menu
+<img width="400" height="400" alt="PXL_20260626_120655686" src="https://github.com/user-attachments/assets/5f54a818-0c6c-4050-b026-f04a45b3eef7" />
 
 ### (8) CAN-Bus / Wireless Button
 * Swipe left from Setup Screen to access button
