@@ -285,9 +285,10 @@ See the LICENSE file for details.
 ---
 # INSTALLATION
 M-Gauge binary package can be uploaded to ESP32-S3 board most simply by using online FLashin service such as: 
-https://www.espboards.dev/tools/program/<img width="656" height="70" alt="image" src="https://github.com/user-attachments/assets/55107935-df89-4205-9783-96fc519cccf6" />
+https://www.espboards.dev/tools/program/
 
-<img width="1523" height="1024" alt="Flashing_Instructions" src="https://github.com/user-attachments/assets/c82e5108-2e26-4ae9-b05c-cdc5272b2cc1" />
+<img width="1523" height="1024" alt="M-Gauge_Flashing_instructions" src="https://github.com/user-attachments/assets/73e57550-637f-4c54-8c82-08ae425fcbfd" />
+
 
 Alternatively, use esptools
 
