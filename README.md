@@ -248,16 +248,13 @@ Works from both:
    * the plug-in version of **SN65HVD230** also requires some bending of pins to match teh GPIO, other options is to get extension header wire. This option takes up       more space. 
    
    * Below image uses CAN_RX Pin 41 , CAN_TX pin 42
-   
-   <img width="420" height="389" alt="M-Gauge_GPIO_Pinout" src="https://github.com/user-attachments/assets/c7e179d3-0139-4736-9555-8fc8bd2c237f" />
+     <img width="420" height="389" alt="M-Gauge_GPIO_Pinout" src="https://github.com/user-attachments/assets/c7e179d3-0139-4736-9555-8fc8bd2c237f" />
    
    * Alternatively CAN_RX Pin 42 and CAN_TX pin 43 can be used, this allows clean packaging when using solder in PCB type tranceiver
-   
-   <img width="600" height="526" alt="Pinout" src="https://github.com/user-attachments/assets/96845cf6-767b-4e1a-8850-05a2c4fc3297" />
+     <img width="600" height="526" alt="Pinout" src="https://github.com/user-attachments/assets/96845cf6-767b-4e1a-8850-05a2c4fc3297" />
 
-   * Can-Bus Tranceiver PCB soldered in to the GPIO-Pin Header
-
-   <img width="800" height="800" alt="Assembly_1" src="https://github.com/user-attachments/assets/83512ebb-7542-4fbf-956f-f070f6c03470" />
+   * Can-Bus Tranceiver PCB soldered in to the GPIO-Pin Header and assembled to the 3D printed enclosure.
+     <img width="800" height="800" alt="Assembly_1" src="https://github.com/user-attachments/assets/83512ebb-7542-4fbf-956f-f070f6c03470" />
 
    * Another option is to use this type of CAN-Bus tranceiver board. Requires basically only a bit of bending of conection pins as shown
    * This would be the plug&play solution...
@@ -271,6 +268,9 @@ Works from both:
 * Some type of automotive grade power supply to provide stable 5V to ESP32 is required!
   * DC-DC Step Down Power Supply Module DC 7-100V to DC 5V 3A from Aliexpress has worked for me
   <img width="455" height="226" alt="DC-DC_Regulator" src="https://github.com/user-attachments/assets/f356a263-5a68-4ab7-92a0-42cf15032f67" />
+  
+  https://www.aliexpress.com/item/1005005978350087.html
+
 * 3D printed casing is designed to house this small regulator board inside
     
   * Only one M-Gauge requires power regulator, the rest of the units can be just daisy chained to the 5V source on the first one.
