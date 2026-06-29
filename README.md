@@ -237,7 +237,7 @@ Works from both:
 ### CAN-Bus Connectivity
   * **This part requires a bit of tinkering...** soldering, or just careful bending of pins depending on what components you choose.. 
   * **SN65HVD230** CAN Bus Transceiver Communication-module is required with Esp32, these can be found online for couple of euros/pcs
-  <img width="418" height="169" alt="SN65HVD230" src="https://github.com/user-attachments/assets/7f77af41-fcaf-4dbc-a341-e3e1377464b4" />
+  <img width="418" height="169" alt="CAN_Bus Tranceivers" src="https://github.com/user-attachments/assets/6e8bea86-43ca-4eea-bbde-ea8c9b25e45d" />
 
   * Either of the two versions will work. Only challenge is to bend the tranceiver module PCB pins to match pins on the ESP32 GPIO Header
    * 3.3V, GND, TX and RX lines need to be connected between **SN65HVD230** transiever and ESP32
@@ -246,7 +246,7 @@ Works from both:
    * If using flat **SN65HVD230** "flat" PCB , Pins on the PCB can be quite easily bent so that all pins match ESP32 I/O-header. 
      * The Tranceiver PCB lays flat on top of the microcontroller PCB making the assembly very compact. Downside is that some soldering is required.
    * the plug-in version of **SN65HVD230** also requires some bending of pins to match teh GPIO, other options is to get extension header wire. This option takes up       more space. 
-   <img width="420" height="389" alt="image" src="https://github.com/user-attachments/assets/dc3e7037-d28e-4814-bbe4-c276a021af4b" />
+   <img width="420" height="389" alt="M-Gauge_GPIO_Pinout" src="https://github.com/user-attachments/assets/c7e179d3-0139-4736-9555-8fc8bd2c237f" />
    <img width="600" height="526" alt="Pinout" src="https://github.com/user-attachments/assets/96845cf6-767b-4e1a-8850-05a2c4fc3297" />
 
    <img width="800" height="800" alt="Assembly_1" src="https://github.com/user-attachments/assets/83512ebb-7542-4fbf-956f-f070f6c03470" />
