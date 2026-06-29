@@ -1,8 +1,10 @@
+
 # M-Gauge
 
 
 **M-Gauge** is a customizable digital gauge display for land based vehicles, designed to present engine and vehicle information clearly, efficiently, and with style.
-<img width="1054" height="136" alt="M-gauge_banner" src="https://github.com/user-attachments/assets/efe6571d-78f4-4e00-a411-6a2485c7ba2f" />
+<img width="1054" height="136" alt="M-Gauge_githun_header_2" src="https://github.com/user-attachments/assets/7ec34bf1-8416-477b-9aca-12d3db672f73" />
+
 
 Built around the **LilyGO T-Display S3 AMOLED 1.75" round display** featuring an **ESP32-S3 microcontroller**.
 
@@ -55,7 +57,7 @@ M-Gauge renders configurable gauge screens with LVGL, receives ECU data over CAN
 ### Favorites
 
 * Each screen can store up to **10 favorite parameters** for quick access.
-<img width="400" height="400" alt="PXL_20260626_120639874 MP" src="https://github.com/user-attachments/assets/f340b90c-bf6a-4c16-9b98-c8294e366f90" />
+<img width="400" height="400" alt="PXL_20260626_120639874 MP" src="https://github.com/user-attachments/assets/2eb71014-8f5e-4595-9fff-0645d4d5b238" />
 
 
 ## Alarm limits
@@ -75,41 +77,45 @@ Choose from **6 different screen layouts**:
 ### (1) Analog Gauge
 
 * Classic analog single gauge display.
+<img width="400" height="400" alt="PXL_20260626_120622484 MP" src="https://github.com/user-attachments/assets/6a702391-53d4-445f-9af9-40375557d87a" />
 
-<img width="400" height="400" alt="PXL_20260626_120622484 MP" src="https://github.com/user-attachments/assets/455af88a-bbed-49db-b852-671e734ac1fe" />
 
 ### (2) Dual Analog Gauge
 
 * Display two parameters in classic analog gauge simultaneously.
-<img width="400" height="400" alt="PXL_20260626_120612946 MP" src="https://github.com/user-attachments/assets/89491109-5dd1-4eb1-a1b9-7f22cbd8b54d" />
+<img width="400" height="400" alt="PXL_20260626_120612946 MP" src="https://github.com/user-attachments/assets/80c7aad1-20e5-4b02-8d8b-bc8717e41c59" />
+
 
 ### (3) Analog Gauge + Status Display
 
 * Analog Gauge combined with ECU status and warning information.
-<img width="400" height="400" alt="PXL_20260626_120604008 MP" src="https://github.com/user-attachments/assets/3a9e7514-996c-4f0a-91d9-98bf92fb2914" />
+<img width="400" height="400" alt="PXL_20260626_120604008 MP" src="https://github.com/user-attachments/assets/48a45085-5489-4d58-bd8b-4112be841997" />
+
 
 ### (4) Multi-Data Dashboard
 
 * Display up to **8 parameters** on a single screen with bar type visualization.
-<img width="400" height="400" alt="PXL_20260626_120556492 MP" src="https://github.com/user-attachments/assets/3d8eccc8-5856-4be4-b223-75f0bdd9ce03" />
+<img width="400" height="400" alt="PXL_20260626_120556658" src="https://github.com/user-attachments/assets/665e2cf3-525c-4895-8872-f01eea6247ea" />
 
 
 ### (5) Rolling Data Visualizer
 
 * Real-time graphing of **two user-selected parameters**.
-<img width="400" height="400" alt="b615b8e4-89d6-463c-8f92-b31a4742bee2-copied-media~2" src="https://github.com/user-attachments/assets/3b3d25d6-e3f8-4aa0-9c9e-98f9f245f4d5" />
+<img width="400" height="400" alt="b615b8e4-89d6-463c-8f92-b31a4742bee2-copied-media~2" src="https://github.com/user-attachments/assets/878bdd44-f71d-427f-896e-4a6106e2214c" />
 
 
 ### (6) Numeric Display simple gauge
 
 * Large numerical value display with two optional visualization bars for maximum readability. Gear, lambda, etc..
 * Custom, userdefined colors
-<img width="400" height="400" alt="d33cd985-7a68-41cb-8c29-f30157df4d9a-copied-media~2" src="https://github.com/user-attachments/assets/7c5bbac4-22c7-4e5e-bf8b-c3f63feb2057" />
+<img width="400" height="400" alt="d33cd985-7a68-41cb-8c29-f30157df4d9a-copied-media~2" src="https://github.com/user-attachments/assets/1e963a1f-44cf-4455-848b-afdb904d0ab9" />
+
 
 
 ### (7) On Screen Gauge Setup
 * Easy dropdown configuration menu
-<img width="400" height="400" alt="PXL_20260626_120655686" src="https://github.com/user-attachments/assets/5f54a818-0c6c-4050-b026-f04a45b3eef7" />
+<img width="400" height="400" alt="PXL_20260626_120655686" src="https://github.com/user-attachments/assets/47c1c09a-8e5c-4674-85c4-b21e2792e5ce" />
+
 
 ### (8) CAN-Bus / Wireless Button
 * Swipe left from Setup Screen to access button
@@ -241,12 +247,16 @@ Works from both:
      * The Tranceiver PCB lays flat on top of the microcontroller PCB making the assembly very compact. Downside is that some soldering is required.
    * the plug-in version of **SN65HVD230** also requires some bending of pins to match teh GPIO, other options is to get extension header wire. This option takes up       more space. 
    <img width="420" height="389" alt="image" src="https://github.com/user-attachments/assets/dc3e7037-d28e-4814-bbe4-c276a021af4b" />
-   <img width="1870" height="1639" alt="PXL_20260614_171627156 MP" src="https://github.com/user-attachments/assets/87603509-c2bd-4edd-89f1-761c9cd94be1" />
-   <img width="1023" height="1023" alt="20260626_142410-COLLAGE" src="https://github.com/user-attachments/assets/c0a7dc9f-469f-4d6c-911a-f35df642d700" />
-   
+   <img width="600" height="526" alt="Pinout" src="https://github.com/user-attachments/assets/96845cf6-767b-4e1a-8850-05a2c4fc3297" />
+
+   <img width="800" height="800" alt="Assembly_1" src="https://github.com/user-attachments/assets/83512ebb-7542-4fbf-956f-f070f6c03470" />
+
    * Another option is to use this type of CAN-Bus tranceiver board. Requires basically only a bit of bending of conection pins as shown
    * This would be the plug&play solution...
-   <img width="1023" height="1023" alt="PXL_20260614_140604601 MP-COLLAGE" src="https://github.com/user-attachments/assets/e9f09999-8d7f-4dfb-b865-7b785aa6dd4f" />
+   <img width="800" height="800" alt="Assembly_2" src="https://github.com/user-attachments/assets/176b7f8a-b75d-43d0-bc18-586de07d6014" />
+
+
+
    
 
 ### Power source
@@ -313,4 +323,5 @@ All settings found in setup.conf and canmap.conf can be edited directly in from 
 * Enable Configuration Web Server and Wifi on the Setup page
 * Connect your wifi to M-Gauge access point
 * open your favorite browser and type in 192.168.0.10(0,1,2,3,4). The last number is the Gauge_ID of your M-Gauge, which you set in the Setup Page 
-<img width="569" height="1223" alt="image" src="https://github.com/user-attachments/assets/55863866-9263-4506-a843-74d94f8a0779" />
+<img width="400" height="860" alt="Configuration" src="https://github.com/user-attachments/assets/b52c6959-870f-4c1a-beec-86805ede102d" />
+
