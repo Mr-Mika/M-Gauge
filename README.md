@@ -262,8 +262,8 @@ Works from both:
 ### Power source
 * Some type of automotive grade power supply to provide stable 5V to ESP32 is required!
   * DC-DC Step Down Power Supply Module DC 7-100V to DC 5V 3A from Aliexpress has worked for me
-  <img width="455" height="226" alt="image" src="https://github.com/user-attachments/assets/a31220f2-5c24-454a-8c7a-b6a12681839c" />
-  * 3D printed casing is designed to house this small regulator board inside
+  <img width="455" height="226" alt="DC-DC_Regulator" src="https://github.com/user-attachments/assets/f356a263-5a68-4ab7-92a0-42cf15032f67" />
+* 3D printed casing is designed to house this small regulator board inside
     
   * Only one M-Gauge requires power regulator, the rest of the units can be just daisy chained to the 5V source on the first one.
     That is, just as long the output of the reguator is not exceeded   
