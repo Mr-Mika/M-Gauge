@@ -248,9 +248,14 @@ Works from both:
    * the plug-in version of **SN65HVD230** also requires some bending of pins to match teh GPIO, other options is to get extension header wire. This option takes up       more space. 
    
    * Below image uses CAN_RX Pin 41 , CAN_TX pin 42
+   
    <img width="420" height="389" alt="M-Gauge_GPIO_Pinout" src="https://github.com/user-attachments/assets/c7e179d3-0139-4736-9555-8fc8bd2c237f" />
+   
    * Alternatively CAN_RX Pin 42 and CAN_TX pin 43 can be used, this allows clean packaging when using solder in PCB type tranceiver
+   
    <img width="600" height="526" alt="Pinout" src="https://github.com/user-attachments/assets/96845cf6-767b-4e1a-8850-05a2c4fc3297" />
+
+   * Can-Bus Tranceiver PCB soldered in to the GPIO-Pin Header
 
    <img width="800" height="800" alt="Assembly_1" src="https://github.com/user-attachments/assets/83512ebb-7542-4fbf-956f-f070f6c03470" />
 
