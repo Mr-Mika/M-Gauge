@@ -2,7 +2,7 @@
 # M-Gauge
 
 
-**M-Gauge** is a customizable digital gauge display for land based vehicles, designed to present engine and vehicle information clearly, efficiently, and with style.
+**M-Gauge** is a customizable digital gauge display for land based vehicles, designed to present engine and vehicle information clearly, efficiently, and with style. M-Gauge renders configurable gauge screens, receives ECU data over CAN bus, supports user configurable favorites/settings stored internally, includes optional WiFi, Over the air updates and ESP-NOW features.
 <img width="1054" height="136" alt="M-Gauge_githun_header_2" src="https://github.com/user-attachments/assets/7ec34bf1-8416-477b-9aca-12d3db672f73" />
 
 
@@ -12,7 +12,15 @@ https://lilygo.cc/products/t-display-s3-amoled-1-64
 
 Other ESP32-S3 based round display modules (Waveshare, etc.) should work with minor modifications.
 
-M-Gauge renders configurable gauge screens with LVGL, receives ECU data over CAN bus, supports user configurable favorites/settings stored in LittleFS, and includes optional WiFi, Over the air updates and ESP-NOW features.
+___
+**UPDATE!** Waveshare 1.75 AMOLED tested and working with minor software modifications.
+
+Brings also additional new and cool features like built-in 3-axis accelorometer, etc..
+
+https://www.waveshare.com/esp32-s3-touch-amoled-1.75.htm
+
+Updated firmware binary for Waveshare board available here soon..
+___
 
 ## Hardware
 
@@ -20,7 +28,7 @@ M-Gauge renders configurable gauge screens with LVGL, receives ECU data over CAN
 - SN65HVD230 transceiver connected to the configured ESP32 TWAI/CAN pins
 - 12V->5V DC-DC Step Down regulator suitable for automotive use  
 - Optional SD card for loading of external configurations and custom images
-- 3D Printed enclosure available.
+- 3D-model for 3D Printed enclosure available 
 ---
 
 ## Features
