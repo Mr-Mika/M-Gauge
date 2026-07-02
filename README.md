@@ -296,8 +296,7 @@ Works from both:
 # License
 
 M-Gauge is licensed under the M-Gauge Non-Commercial License.
-
-Commercial use requires written permission from the copyright holder.
+Commercial use is not allowed.
 
 See the LICENSE file for details.
 
