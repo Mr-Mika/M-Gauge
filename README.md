@@ -58,8 +58,8 @@ ___
 
 ### Touch Controls
 
-* Swipe **Left / Right** to change screens
-* Swipe **Up / Down** to change displayed parameter
+* Gesture Swipe **Left / Right** to change screens
+* Gesture Swipe **Up / Down** to change displayed parameter in current screen
 * Long press to open the screen specific parameter selection menu
 
 ### Favorites
