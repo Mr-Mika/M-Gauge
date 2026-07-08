@@ -149,6 +149,7 @@ Choose from **6 different screen layouts**:
 
 * Supports **staged shift lights** when using multiple M-Gauge units.
 * Each gauge backround turns yellow in sequence (user defined steps)
+* At selected shift RPM all gauges turn green
 * Define total number of gauges, individual Gauge ID & shift light limit values,in the Setup screen, system will calculate shift light points for each gauge
 * Shift light functionality source can be freely chosen from any ECU data, so this can act as some other indicator than shift light just as well...
 
