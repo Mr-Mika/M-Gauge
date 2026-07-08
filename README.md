@@ -22,6 +22,12 @@ https://www.waveshare.com/esp32-s3-touch-amoled-1.75.htm
 Updated firmware binary for Waveshare board available here soon..
 ___
 
+**Short teaser video below**
+
+[VIDEO of M-Gauge features](https://flic.kr/p/2snAxms)
+
+
+___
 ## Hardware
 
 - ESP32-S3 based round display board
