@@ -348,3 +348,347 @@ All settings found in setup.conf and canmap.conf can be edited directly in from 
 * open your favorite browser and type in 192.168.0.10(0,1,2,3,4). The last number is the Gauge_ID of your M-Gauge, which you set in the Setup Page 
 <img width="400" height="860" alt="Configuration" src="https://github.com/user-attachments/assets/b52c6959-870f-4c1a-beec-86805ede102d" />
 
+# M-Gauge Configuration Guide
+
+M-Gauge uses two configuration files:
+
+- `setup.conf` stores gauge settings, favorites, and the startup screen.
+- `canmap.conf` tells M-Gauge how to read and display ECU CAN data and internal inputs.
+
+Both files are stored in LittleFS. A `canmap.conf` found on the SD card is copied to LittleFS during startup. Settings changed on the gauge are saved back to `setup.conf`, so manual changes to that file may later be overwritten.
+
+## General value formats
+
+- `0` means **Off** and `1` means **On** for most switches.
+- CAN IDs can be decimal or hexadecimal. Hexadecimal values start with `0x`, for example `0x500`.
+- Signal and screen numbering starts at `0`.
+- Keep parameter names and letter case exactly as shown.
+
+# setup.conf
+
+Ordinary settings use this format:
+
+```text
+SETTING:parameter:value
+```
+
+Example:
+
+```text
+SETTING:brightness:180
+SETTING:wifiEnabled:1
+```
+
+## Gauge and display settings
+
+| Parameter | Values | Description |
+|---|---:|---|
+| `brightness` | `10` to `255` | Screen brightness. A higher number makes the display brighter. |
+| `gaugeId` | `0` to `10` | Number that identifies this gauge when several M-Gauges are linked. Each gauge should use a different ID. |
+| `gaugeCanId` | `0x300` to `0x500` | Base CAN ID used for communication between M-Gauges. The gauge ID is added to this value. |
+| `gaugeCount` | `1` to `16` | Total number of M-Gauges in the linked system. |
+| `selectedSetting` | menu row number | Remembers the last selected item on the Gauge Setup screen. Normally this should not be edited manually. |
+| `simpleGaugeIndicatorVersion` | `3` | Internal compatibility marker for the Simple Gauge Indicator setting. Keep this at `3`. |
+| `simpleGaugeIndicator` | `0` to `4` | Simple gauge indicator: `0` Bar, `1` Arc, `2` Arc Image, `3` None, `4` Both bar and arc. |
+| `simpleGaugeColor` | `0` to `255` | Color selection used by the simple gauge bar and all basic arcs. |
+| `simpleOverlayImage` | `0` or `1` | Shows the custom `GaugeBG5.png` overlay on the simple gauge when enabled. |
+| `limitGaugeValues` | `0` or `1` | Keeps displayed values within the `min` and `max` limits defined in `canmap.conf`. |
+| `showNeedle` | `0` to `2` | Main gauge indicator: `0` Arc, `1` Needle and arc, `2` Needle only. |
+| `needleType` | `0` or `1` | Needle image: `0` built-in needle, `1` custom `Needle.png`. |
+| `arcType` | `0` or `1` | Arc style on gauge screens 1 to 3: `0` custom image, `1` basic colored arc. |
+| `chartUpdateRateMs` | `0` to `100` | Delay between chart updates in milliseconds. Lower values are faster but use more processing power. |
+
+## Startup and button settings
+
+| Parameter | Values | Description |
+|---|---:|---|
+| `bootDelayMs` | `0` to `2000` | Extra delay before startup, in milliseconds. |
+| `showBootImage` | `0` or `1` | Shows the boot image during startup when enabled. |
+| `buttonMode` | `0` or `1` | Opens the dedicated button-image screen at startup when enabled. |
+| `buttonPressedCanEventId` | `0` to `255` | Event number sent over the M-Gauge CAN link when the button screen is pressed. |
+
+## CAN settings
+
+| Parameter | Values | Description |
+|---|---:|---|
+| `canBusLink` | `0` or `1` | Enables CAN reception and communication between linked M-Gauges. |
+| `canRxPin` | `0` to `48` | GPIO pin connected to CAN receive (RX). Use the value required by your board wiring. |
+| `canTxPin` | `0` to `48` | GPIO pin connected to CAN transmit (TX). Use the value required by your board wiring. |
+| `canRsPin` | `-1` to `48` | GPIO pin used for CAN transceiver standby or mode control. Use `-1` when it is not connected. |
+
+## WiFi, ESP-NOW, and debugging
+
+| Parameter | Values | Description |
+|---|---:|---|
+| `wifiEnabled` | `0` or `1` | Enables the M-Gauge WiFi access point. |
+| `wifiPassword` | 8 to 10 characters | Password for the M-Gauge WiFi access point. |
+| `espNowEnabled` | `0` or `1` | Enables wireless ESP-NOW communication between gauges. |
+| `espNowHostMode` | `0` to `2` | ESP-NOW role: `0` Client, `1` Host, `2` One-to-many host. |
+| `espNowMacFilter` | `0` or `1` | Allows a client to accept data only from its saved host when enabled. |
+| `espNowHostMac` | MAC address | Saved host address, for example `AA:BB:CC:DD:EE:FF`. This is normally managed automatically. |
+| `espNowPeerMacs` | MAC address list | Comma-separated list of ESP-NOW peers. This is normally managed automatically. |
+| `telnetEnabled` | `0` or `1` | Enables remote debug messages over the network. |
+
+The **Web Config Server** switch is controlled from the Gauge Setup screen. It is not currently stored as a separate `setup.conf` parameter.
+
+## Shift light, alarms, and status
+
+| Parameter | Values | Description |
+|---|---:|---|
+| `revLimitSourceIndex` | `0` to `83` | Signal number from `canmap.conf` used to control the shift light. This is normally the RPM signal. |
+| `shiftLight` | signal value | Value at which the shift light becomes active. Its unit follows the selected shift-light signal. |
+| `shiftLightStep` | signal value | Difference between the shift-light points of consecutive linked gauges. Use `0` for the same point on every gauge. |
+| `demoBoostLimitX10` | value x 10 | Boost warning limit in tenths of a bar. For example, `15` means `1.5 bar`. |
+| `displayErrors` | `0` or `1` | Shows ECU error messages when enabled. |
+| `displayStatus` | `0` or `1` | Shows active status-bit messages when enabled. |
+| `alarmMonitorEnabled` | `0` or `1` | Monitors the signals listed in `ROLE:alarmMonitor` and warns when a limit is exceeded. |
+
+## Internal sensor settings
+
+| Parameter | Values | Description |
+|---|---:|---|
+| `accelerometerEnabled` | `0` or `1` | Enables the board motion sensor for accelerometer and gyroscope values. |
+| `internalInputsEnabled` | `0` or `1` | Enables user-defined GPIO inputs from `INTERNAL:` rows in `canmap.conf`. |
+
+## Screen, selection, and favorite rows
+
+These rows do not begin with `SETTING:` DO NOT MODIFY THESE MANUALLY!.
+
+| Row | Description |
+|---|---|
+| `SELECTED:<screen>: <signals>` | Signal numbers currently shown in the gauge positions on that screen. |
+| `FAVORITES:<screen>: <signals>` | Signal numbers available in that screen's Favorites list. A screen can have up to 10 favorites. |
+| `STARTSCREEN:<screen>` | Screen opened after startup. Valid screen numbers are `0` to `5`. |
+
+Example:
+
+```text
+SELECTED:0: 1,2,3
+FAVORITES:0: 1,2,3,18
+STARTSCREEN:0
+```
+
+Screen `0` is the first gauge screen and screen `5` is the sixth gauge screen. Signal numbers refer to `SIGNAL:` or `INTERNAL:` numbers in `canmap.conf`.
+
+# canmap.conf
+
+`canmap.conf` defines where gauge data comes from and how it is shown. Blank lines and lines beginning with `#` or `;` are ignored, so they can be used for comments.
+
+The recommended format keeps one complete definition on one line:
+
+```text
+SIGNAL:0,id=0x520,startBit=0,bitLength=16,endian=little,signed=0,factor=1,offset=0,scaling=1,min=0,max=8000,alarmLimitMin=0,alarmLimit=7000,alarmSource=0,name=RPM|Engine Speed
+```
+
+## CAN bus speed
+
+```text
+SPEED:500KBITS
+```
+
+| Parameter | Description |
+|---|---|
+| `SPEED` | CAN bus speed. Supported values are `1`, `5`, `10`, `12.5`, `16`, `20`, `25`, `50`, `100`, `125`, `250`, `500`, `800` kbit/s and `1` Mbit/s. `500KBITS` is the normal default. |
+
+Examples such as `500K`, `500KBITS`, `500000BITS`, and `1MBITS` are accepted.
+
+## CAN receive filter
+
+```text
+FILTER:id=0x500,mask=0x700,extended=0
+```
+
+| Field | Values | Description |
+|---|---:|---|
+| `id` | CAN ID | Base ID that the filter compares against incoming CAN messages. `canId` is also accepted. |
+| `mask` | bit mask | Selects which parts of the CAN ID must match. A wider filter reduces unwanted CAN traffic. |
+| `extended` | `0` or `1` | Use `0` for normal 11-bit CAN IDs and `1` for extended 29-bit IDs. `extd` is also accepted. |
+
+If the filter is missing or invalid, M-Gauge accepts all CAN IDs.
+
+## Signal roles
+
+Roles tell M-Gauge which configured signals have special jobs.
+
+```text
+ROLE:rpmIndex=0
+ROLE:mapIndex=1
+ROLE:errorCountIndex=50
+ROLE:errorCodeIndex=51
+ROLE:alarmMonitor=3,5,18
+```
+
+| Role | Description |
+|---|---|
+| `rpmIndex` | Signal number used as engine RPM. |
+| `mapIndex` | Signal number used as manifold pressure or boost. |
+| `errorCountIndex` | Signal number that reports how many ECU errors are active. |
+| `errorCodeIndex` | Signal number that reports the current ECU error code. |
+| `alarmMonitor` | Comma-separated signal numbers to watch for low or high alarms. Up to 10 signals can be listed. |
+
+## CAN signals
+
+A `SIGNAL:` row creates one value that can be selected and displayed on the gauge. Signal numbers are `0` to `83`.
+
+```text
+SIGNAL:3,id=0x520,startBit=48,bitLength=16,endian=little,signed=1,factor=1,offset=0,scaling=10,min=-40,max=150,alarmLimitMin=-20,alarmLimit=110,alarmSource=0,name=C|Coolant Temperature
+```
+
+| Field | Values | Description |
+|---|---:|---|
+| `id` | CAN ID | CAN message that contains this value. `canId` is also accepted. |
+| `startBit` | `0` to `63` | Position of the first data bit inside the CAN message. |
+| `bitLength` | `1` to `64` | Number of bits used by the value. Common sizes are `8`, `16`, and `32`. |
+| `endian` | `little` or `big` | Byte order used by the ECU for this value. Use the value stated in the ECU CAN documentation. |
+| `signed` | `0` or `1` | Use `1` if the value can be negative; otherwise use `0`. |
+| `valueType` | `integer` or `float32` | Data format. Most signals use `integer`. A 32-bit IEEE floating-point signal uses `float32`. `type` and `format` are accepted as alternate field names. |
+| `factor` | number | Multiplies the received value to convert it to the required scale. Usually `1`. |
+| `offset` | number | Amount added after the factor. Usually `0`. |
+| `scaling` | positive whole number | Divides the stored value for display. For example, stored value `123` with scaling `10` is shown as `12.3`. |
+| `min` | number | Lowest value used by the gauge scale and optional value limiting. |
+| `max` | number | Highest value used by the gauge scale and optional value limiting. |
+| `alarmLimitMin` | number | Low alarm point for this signal. |
+| `alarmLimit` | number | High alarm point for this signal. |
+| `alarmSource` | number | Reserved compatibility field. It is stored but currently does not change alarm behavior. Use `0`. |
+| `name` | `unit|description` | Unit and user-visible name. For example, `C|Coolant Temperature`. Use `|Gear` when no unit is needed. |
+
+The basic conversion is:
+
+```text
+displayed value = ((received value x factor) + offset) / scaling
+```
+
+Use the factor, offset, byte order, and bit position specified in the ECU manufacturer's CAN documentation.
+
+## Status bits
+
+A `BIT:` row reads one on/off condition from a CAN message. Bit numbers are `0` to `15`.
+
+```text
+BIT:0,id=0x530,startBit=2,name=Launch Control Active
+```
+
+| Field | Values | Description |
+|---|---:|---|
+| `id` | CAN ID | CAN message that contains the status bit. `canId` is also accepted. |
+| `startBit` | `0` to `63` | Position of the status bit inside the message. |
+| `name` | text | Message shown when this status is active. Use `|` where a line break is wanted. |
+
+Status messages are shown only when `SETTING:displayStatus:1` is enabled.
+
+## Text shown for specific values
+
+`VALUE:` replaces a number with text. `UNIT:` changes the unit or secondary text for a matching value. Each rule refers to a signal number.
+
+```text
+VALUE:57,raw=0,text=N
+VALUE:57,raw=1,text=1
+UNIT:57,raw=0,text=Neutral
+UNIT:57,raw>10,text=Gear Failure
+```
+
+| Field | Description |
+|---|---|
+| `raw=number` | Applies the rule when the stored signal value equals the number. |
+| `raw>number` | Applies when the stored value is greater than the number. |
+| `raw<number` | Applies when the stored value is less than the number. |
+| `raw>=number` | Applies when the stored value is equal to or greater than the number. |
+| `raw<=number` | Applies when the stored value is equal to or less than the number. |
+| `text` | Text to show when the rule matches. Use `|` where a line break is wanted. |
+
+Rules compare the stored value after `factor` and `offset`, but before `scaling`. M-Gauge supports up to 32 `VALUE:` rules and 32 `UNIT:` rules.
+
+## ECU error descriptions
+
+An `ERROR:` row gives a readable message to an ECU error code.
+
+```text
+ERROR:12,text=Coolant temperature sensor fault
+```
+
+| Field | Description |
+|---|---|
+| Number after `ERROR:` | ECU error code from `0` to `254`. |
+| `text` | Error message shown to the user. Use `|` where a line break is wanted. |
+
+Error messages are shown only when `SETTING:displayErrors:1` is enabled and the error role signals are configured.
+
+## Internal motion sensors
+
+An `INTERNAL:` row can place a board accelerometer or gyroscope value in any signal slot. The number after `INTERNAL:` is the signal number shown in Favorites.
+
+```text
+INTERNAL:25,source=accelX,factor=1,offset=0,scaling=1000,min=-2,max=2,alarmLimitMin=-2,alarmLimit=2,alarmSource=0,name=g|Acceleration X
+```
+
+| Field | Values | Description |
+|---|---:|---|
+| `source` | `accelX`, `accelY`, `accelZ`, `gyroX`, `gyroY`, `gyroZ` | Motion sensor axis used as the value source. |
+| `factor` | number | Multiplies the sensor value. Usually `1`. |
+| `offset` | number | Amount added after the factor. Usually `0`. |
+
+The display fields `name`, `scaling`, `min`, `max`, `alarmLimitMin`, `alarmLimit`, and `alarmSource` work the same way as on a `SIGNAL:` row. Enable `SETTING:accelerometerEnabled:1` to update these values.
+
+## Internal GPIO inputs
+
+An `INTERNAL:` row with `source=gpio` displays a digital or analog GPIO input as a gauge signal.
+
+```text
+INTERNAL:28,source=gpio,pin=21,mode=analog_mv,invert=0,factor=1,offset=0,scaling=1000,min=0,max=3.3,alarmLimitMin=0,alarmLimit=3.3,alarmSource=0,name=V|Sensor Input
+```
+
+| Field | Values | Description |
+|---|---:|---|
+| `source` | `gpio` | Selects a user GPIO pin as the value source. |
+| `pin` | allowed GPIO number | Physical input pin to read. |
+| `mode` | see list below | Selects digital or analog input behavior. |
+| `invert` | `0` or `1` | Reverses digital input values when set to `1`. It has no effect on analog inputs. |
+| `factor` | number | Multiplies the pin reading. Usually `1`. |
+| `offset` | number | Amount added after the factor. Usually `0`. |
+
+Available GPIO modes:
+
+| Mode | Description |
+|---|---|
+| `digital` | Normal digital input. Displays `0` or `1`. |
+| `digital_pullup` | Digital input with the ESP32 internal pull-up resistor enabled. |
+| `digital_pulldown` | Digital input with the ESP32 internal pull-down resistor enabled. |
+| `analog_raw` | Displays the raw analog-to-digital converter reading. |
+| `analog_mv` | Displays the measured input in millivolts before display scaling. |
+
+The display fields `name`, `scaling`, `min`, `max`, `alarmLimitMin`, `alarmLimit`, and `alarmSource` work the same way as on a `SIGNAL:` row. Enable `SETTING:internalInputsEnabled:1` to update GPIO values.
+
+Current LilyGo GPIO allowlist: `1`, `2`, `3`, `5`, `21`, `38`, `39`, `45`, `46`, `47`. Up to six GPIO inputs can be configured. GPIO inputs are currently supported on the LilyGo build; Waveshare builds ignore them.
+
+> Check the board wiring before selecting a pin. The user is responsible for choosing a suitable digital or analog pin and keeping the input voltage within the ESP32 electrical limits.
+
+An `INTERNAL:` definition replaces CAN decoding for the same signal number. Define `source` before the other input fields on that row.
+
+## Minimal canmap.conf example
+
+```text
+# CAN bus setup
+SPEED:500KBITS
+FILTER:id=0x500,mask=0x700,extended=0
+
+# Special signal roles
+ROLE:rpmIndex=0
+ROLE:mapIndex=1
+ROLE:errorCountIndex=50
+ROLE:errorCodeIndex=51
+ROLE:alarmMonitor=3,5
+
+# Gauge signals
+SIGNAL:0,id=0x520,startBit=0,bitLength=16,endian=little,signed=0,factor=1,offset=0,scaling=1,min=0,max=8000,alarmLimitMin=0,alarmLimit=7000,alarmSource=0,name=RPM|Engine Speed
+SIGNAL:1,id=0x520,startBit=16,bitLength=16,endian=little,signed=0,factor=1,offset=0,scaling=10,min=0,max=300,alarmLimitMin=0,alarmLimit=250,alarmSource=0,name=kPa|Manifold Pressure
+
+# Status and text examples
+BIT:0,id=0x530,startBit=2,name=Launch Control Active
+VALUE:57,raw=0,text=N
+UNIT:57,raw=0,text=Neutral
+ERROR:12,text=Coolant temperature sensor fault
+```
+
+Restart M-Gauge after replacing `canmap.conf` so the new mapping is loaded.
+
+
