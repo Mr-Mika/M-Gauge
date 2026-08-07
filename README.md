@@ -2,7 +2,7 @@
 # M-Gauge
 
 
-**M-Gauge** is a customizable digital gauge display for land based vehicles, designed to present engine and vehicle information clearly, efficiently, and with style. M-Gauge renders configurable gauge screens, receives ECU data over CAN bus, supports user configurable favorites/settings stored internally, includes optional WiFi, Over the air updates and ESP-NOW features.
+**M-Gauge** is a customizable digital gauge display for land based vehicles, designed to present engine and vehicle information clearly, efficiently, and with style. M-Gauge renders configurable gauge screens, receives ECU data over CAN bus, supports user configurable favorites/settings stored internally, includes optional WiFi, Web configuration utility, and ESP-NOW wireless gauge features.
 <img width="1054" height="136" alt="M-Gauge_githun_header_2" src="https://github.com/user-attachments/assets/7ec34bf1-8416-477b-9aca-12d3db672f73" />
 
 
