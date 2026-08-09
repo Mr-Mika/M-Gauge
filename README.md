@@ -250,6 +250,9 @@ Works from both:
 * Capacitive Touch Interface
   
 ### CAN-Bus Connectivity
+
+**NOTE!!! The only currently available 3D-printed enclosure model is compatible only with the LilyGo 1.75" with the flat PCB style CAN-Tranceiver!!!!. The plug&play type CAN-transceiver, as well as other boards require full redesign of the enclosure. Anyone interested in different enclosure variants, please open issue here on this project**
+
   * **This part requires a bit of tinkering...** soldering, or just careful bending of pins depending on what components you choose.. 
   * **SN65HVD230** CAN Bus Transceiver Communication-module is required with Esp32, these can be found online for couple of euros/pcs
   <img width="418" height="169" alt="CAN_Bus Tranceivers" src="https://github.com/user-attachments/assets/6e8bea86-43ca-4eea-bbde-ea8c9b25e45d" />
