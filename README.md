@@ -41,10 +41,11 @@ ___
 
 ### ECU Support
 * CAN-Bus communication between ECU and M-Gauge
-* Currently supports **MaxxECU standalone ECUs**
+* Originally designed to work with **MaxxECU**
 * Display any available ECU parameter in MaxxECU v1.3 canbus protocol
  * Should just as well work with other ECU's that stream data on CAN-Bus
-* **User configurable CAN Message mapping**
+ * **User configurable CAN Message mapping**
+ * Untested configuration files for Megasquirt, Haltec and Holley ECU's available.
 * Automatic scaling of engine data to match selected gauge type
 
 ---
