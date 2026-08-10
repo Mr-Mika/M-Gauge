@@ -25,8 +25,8 @@ Waveshare ESP32-S3 LCD4 is basically plug and play for automotive use, no solder
 Updated firmware binary for Waveshare boards available in the firmware download section
 
 **NOTE!** 
-Waveshare boards DO NOT currently have tested and functional enclosure!! 
-ONLY the LilyGo board has a 3D-printed enclosure available!! 
+1. When ordering Waveshare boards make sure to select version with **touch display** 
+2. Waveshare boards DO NOT currently have tested and functional enclosure!! ONLY the LilyGo board has a 3D-printed enclosure currently available!! 
 ___
 
 **Short teaser video below**
