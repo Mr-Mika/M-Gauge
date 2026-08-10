@@ -13,13 +13,20 @@ https://lilygo.cc/products/t-display-s3-amoled-1-64
 Other ESP32-S3 based round display modules (Waveshare, etc.) should work with minor modifications.
 
 ___
-**UPDATE!** Waveshare 1.75 AMOLED tested and working with minor software modifications.
+**UPDATE!** Waveshare ESP32-S3 1.75 AMOLED and ESP32-S3 4"LCD square format development boards tested and working with M-Gauge!
 
-Brings also additional new and cool features like built-in 3-axis accelorometer, etc..
+Waveshare ESP32-S3 Round 1.75" Brings also additional new and cool features like built-in 3-axis accelorometer, etc.. 
+* https://www.waveshare.com/esp32-s3-touch-amoled-1.75.htm
+-- 
+Waveshare ESP32-S3 LCD4 is basically plug and play for automotive use, no soldering or internal wiring required.
+* Not as good readability in direct sunlight as on the other boards, and generally not as nice display as AMOLED, also slightly slower performance. 
+* https://www.waveshare.com/esp32-s3-touch-lcd-4.htm
 
-https://www.waveshare.com/esp32-s3-touch-amoled-1.75.htm
+Updated firmware binary for Waveshare boards available in the firmware download section
 
-Updated firmware binary for Waveshare board available here soon..
+**NOTE!** 
+Waveshare boards DO NOT currently have tested and functional enclosure!! 
+ONLY the LilyGo board has a 3D-printed enclosure available!! 
 ___
 
 **Short teaser video below**
