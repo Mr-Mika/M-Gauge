@@ -176,15 +176,22 @@ Choose from **6 different screen layouts**:
 
 
 ## Custom CAN-message mapping
-Allows M-Gauge to be used with practically any ECU or CAN-Bus device. 
-Well, at least should work... Has not been tested with any other ECU than MaxxECU Race.
-  
+Allows M-Gauge to be used with practically any aftermarket ECU or CAN-Bus device that's streams data. 
+Well, at least should work...
+Factory OBD, PID polling type CAN-Bus devices are not supported.
+
+----
+**Note!** This part has been largely replaced by the **Configuration web server** interface. 
+SD-Card is not required run M-Gauge!
+
 * On M-Gauge boot, firmware checks SD for file with name /canmap.conf.
 * This file contains all information for CAN-Bus message decoding, ID, min/max values, alarm limits and name&units used on screen. 
 * If file is found on SD-Card during boot up, it copies it to internal file system LittleFS /canmap.conf.
 * on next boot up M-Gauge loads CAN-Bus configuration from internal memory
 * SD card  MUST  be removed once configuration update is made, otherwise settings are always reset on boot.
-   
+----  
+
+
 ---
 
 # Wireless Features
