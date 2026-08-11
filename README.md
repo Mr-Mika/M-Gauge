@@ -17,7 +17,9 @@ ___
 
 Waveshare ESP32-S3 Round 1.75" Brings also additional new and cool features like built-in 3-axis accelorometer, etc.. 
 * https://www.waveshare.com/esp32-s3-touch-amoled-1.75.htm
--- 
+
+--
+
 Waveshare ESP32-S3 LCD4 is basically plug and play for automotive use, no soldering or internal wiring required.
 * Not as good readability in direct sunlight as on the other boards, and generally not as nice display as AMOLED, also slightly slower performance. 
 * https://www.waveshare.com/esp32-s3-touch-lcd-4.htm
