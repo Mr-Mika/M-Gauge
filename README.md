@@ -276,7 +276,7 @@ Works from both:
 
   * Either of the two versions will work. Only challenge is to bend the tranceiver module PCB pins to match pins on the ESP32 GPIO Header
    * 3.3V, GND, TX and RX lines need to be connected between **SN65HVD230** transiever and ESP32
-   * Current pinconfig is set up CAN_RX Pin 42 , CAN_TX pin 43,   
+   * Current pinconfig is set up CAN_RX Pin 41 , CAN_TX pin 42, this is functional ONLy for the LilyGo 1.75" display
    * CAN H and CAN L from ECU CAN-Bus need to be connected to **SN65HVD230** transiever respective connection points
    * If using flat **SN65HVD230** "flat" PCB , Pins on the PCB can be quite easily bent so that all pins match ESP32 I/O-header. 
      * The Tranceiver PCB lays flat on top of the microcontroller PCB making the assembly very compact. Downside is that some soldering is required.
@@ -318,13 +318,12 @@ Works from both:
    * Not absolutely required but makes installation of the display easier, keeps wires tidy inside the enclosure etc, etc...
    * Step / STL file available for download
 
+* **NOTE!! Waveshare LCD4 display only requires change of settings in setup.conf to CAN_RX Pin 0 , CAN_TX pin 6. For Waveshare LCD4, CAN-Bus Connectivity and 5V Power supply installation is not required as the board contains all these items from the factory**  
 ---
 
 # Roadmap
 
 ### Planned Features
-* Make remote button feature more secure, currently anyone can connect to ESP-Now network and activate button remotely ;)
-
 
 ---
 
@@ -345,6 +344,7 @@ https://www.espboards.dev/tools/program/
 
 Alternatively, use esptools
 
+**NOTE! Upload the firmware before making any other physical connections to the display board and verify display functionality using the "Demo - mode" from setup page**
 ---
 ## Configuration
 
@@ -441,7 +441,7 @@ SETTING:wifiEnabled:1
 | Parameter | Values | Description |
 |---|---:|---|
 | `wifiEnabled` | `0` or `1` | Enables the M-Gauge WiFi access point. |
-| `wifiPassword` | 8 to 10 characters | Password for the M-Gauge WiFi access point. |
+| `wifiPassword` | 8 to 10 characters | Password for the M-Gauge WiFi access point. Default WiFi password:12345678 |
 | `espNowEnabled` | `0` or `1` | Enables wireless ESP-NOW communication between gauges. |
 | `espNowHostMode` | `0` to `2` | ESP-NOW role: `0` Client, `1` Host, `2` One-to-many host. |
 | `espNowMacFilter` | `0` or `1` | Allows a client to accept data only from its saved host when enabled. |
