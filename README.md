@@ -5,15 +5,14 @@
 <img width="1054" height="136" alt="M-Gauge_githun_header_2" src="https://github.com/user-attachments/assets/7ec34bf1-8416-477b-9aca-12d3db672f73" />
 
 3 development board displays are supported:
+
 The original the **LilyGO T-Display S3 AMOLED 1.75" round display** featuring an **ESP32-S3 microcontroller**
 * https://lilygo.cc/products/t-display-s3-amoled-1-64
-
---
+  
 
 Waveshare ESP32-S3 Round 1.75" Brings also additional new and cool features like built-in 3-axis accelorometer, etc.. 
 * https://www.waveshare.com/esp32-s3-touch-amoled-1.75.htm
-
---
+  
 
 Waveshare ESP32-S3 LCD4 is basically plug and play for automotive use, no soldering or internal wiring required.
 * Not as good readability in direct sunlight as on the other boards, and generally not as nice display as AMOLED, also slightly slower performance. 
@@ -26,17 +25,15 @@ Updated firmware binary for Waveshare boards available in the firmware download 
 2. Waveshare boards DO NOT currently have tested and functional enclosure!! ONLY the LilyGo board has a 3D-printed enclosure currently available!! 
 ___
 
-**Short teaser video below**
-
-[VIDEO of M-Gauge features](https://flic.kr/p/2snAxms)
-
 
 # M-Gauge 2.0 is here! — More than just a gauge
 M-Gauge 2.0 brings together new and exciting features: deeper visual customization, more onboard sensor inputs, a redesigned browser interface, display-free gateway operation, and more capable wireless ESP-NOW gauge networks.
 
+https://github.com/Mr-Mika/M-Gauge/tree/main/Firmware/M-Gauge%202.0
+
 Whether you want one personalized instrument or several linked displays sharing a single CAN connection, this release gives you more control over how your M-Gauge system looks and works.
 
-https://github.com/Mr-Mika/M-Gauge/tree/main/Firmware/M-Gauge%202.0
+<img width="300" height="300" alt="M-Gauge_2_screens1" src="https://github.com/user-attachments/assets/28b9b08f-288b-4ee6-833d-9ca63ae1c896" /><img width="300" height="300" alt="M-Gauge_2_screens2" src="https://github.com/user-attachments/assets/6ec3baa1-3cce-474c-948c-dfe3533fdbb7" /><img width="300" height="300" alt="M-Gauge_2_screens3" src="https://github.com/user-attachments/assets/fee4f08c-9411-4bb4-a5e4-436c1f88090f" />
 
 ## Native ESP-IDF and expanded hardware support
 
@@ -79,20 +76,11 @@ The ESP-NOW section shows the configured mode, saved host, registered clients an
 
 Live setup provides live configuration controls and device status; it is not a streamed mirror of the gauge display or a live telemetry chart.
 
-## Headless mode — a dedicated CAN-to-wireless gateway
-
-M-Gauge can now operate without a display as a **headless node**. One unit connects to the vehicle CAN bus and forwards data to the gauges in your ESP-NOW network.
-
-Headless mode skips display and touch initialization, LVGL graphics, decoded images and the large graphics buffers, freeing RAM for gateway operation. Its Wi-Fi configuration access and web server remain available, so you can manage the node through the main configuration page and Live setup.
-
-Normal CAN processing and ESP-NOW forwarding continue while browsing in headless mode. Remote pairing, configuration and demo-data generation make it possible to set up and test a display-free installation. Firmware updates pause telemetry, and configuration or radio changes can briefly interrupt communication.
-
-Enable `SETTING:headlessMode:1` in `setup.conf` and reboot. Set it back to `0` and reboot to restore display operation.
-This mode allow user to run M-Gauge in basically any EPS32-S3-16-8 Board, and use it as a wireless gateway to supported M-Gauge displays.
-
 ## Expanded ESP-NOW networking
 
 **One-to-many mode** lets one CAN-connected host supply several wireless M-Gauge clients, reducing the CAN wiring needed behind the dashboard.
+
+<img width="600" height="450" alt="ESP-NOW_simplified" src="https://github.com/user-attachments/assets/04494ec6-217e-486e-bdbf-5494ba67b41d" />
 
 - Explicit pairing and saved host/client registrations simplify building a network that reconnects after reboot.
 - Client host-locking and optional host-MAC filtering help prevent accepting data from an unintended gauge.
@@ -102,6 +90,21 @@ This mode allow user to run M-Gauge in basically any EPS32-S3-16-8 Board, and us
 - Demo generation and forwarding run independently of the host graphics loop, so demanding host screens do not directly control the demo transmission schedule.
 
 **Security note:** pairing, peer registration and MAC filtering provide basic separation between gauge networks, not cryptographic security. The current ESP-NOW transport is unencrypted; do not treat it as confidential or protected against a deliberately spoofed sender.
+
+## Updated CAN buttons and visual status indicators
+
+Alongside the dedicated CAN-button screen, M-Gauge now supports **four additional customizable image buttons**, each with its own CAN event ID, across the supported builds.
+
+<img width="600" height="450" alt="M-Gauge_buttons_simplified" src="https://github.com/user-attachments/assets/548addf3-70a4-4c35-99f5-f915ae612aa2" />
+
+Use them as buttons, status indicators, or both:
+
+- Send a configured CAN event when pressed, including from an ESP-NOW client through its host.
+- Link each image to a `BIT:` status using visibility, flashing or opacity behavior.
+- Show actionable buttons dimmed when inactive, with a brighter pressed/active state.
+- Select status-screen, corner-button or supported gauge-overlay placement. Needle-screen overlays follow an upper arc inside the dial ticks; setup remains free of these controls.
+
+Updated CAN control handling also supports brightness, screen-selection and displayed-signal commands addressed to the gauge itself, while avoiding brightness retransmission loops.
 
 ## Accelerometer inputs and drag performance
 
@@ -125,19 +128,6 @@ Choose Full Range, Bass, Midrange, Treble or a Custom frequency band. Custom low
 
 Microphone capture is demand-driven, and frequency analysis runs only when its output is needed. This avoids spending processing resources on unused audio inputs. Sound intensity is a relative level, not a calibrated sound-pressure reading in dB SPL.
 
-## Updated CAN buttons and visual status indicators
-
-Alongside the dedicated CAN-button screen, M-Gauge now supports **four additional customizable image buttons**, each with its own CAN event ID, across the supported builds.
-
-Use them as buttons, status indicators, or both:
-
-- Send a configured CAN event when pressed, including from an ESP-NOW client through its host.
-- Link each image to a `BIT:` status using visibility, flashing or opacity behavior.
-- Show actionable buttons dimmed when inactive, with a brighter pressed/active state.
-- Select status-screen, corner-button or supported gauge-overlay placement. Needle-screen overlays follow an upper arc inside the dial ticks; setup remains free of these controls.
-
-Updated CAN control handling also supports brightness, screen-selection and displayed-signal commands addressed to the gauge itself, while avoiding brightness retransmission loops.
-
 ## More flexible signals, warnings and testing
 
 - Optional **`smoothingMs`** on CAN and internal signals steadies noisy values such as fuel level. Missing or zero leaves smoothing disabled, and raw telemetry remains unchanged.
@@ -146,6 +136,17 @@ Updated CAN control handling also supports brightness, screen-selection and disp
 - Expanded alarm/status displays, selectable shift-light sources and a separately adjustable **Shift Light Overlimit** threshold give more control over warnings.
 - Supported internal inputs include GPIO digital/analog measurements and external **INA226 bus-voltage monitoring**, with user-defined scaling.
 - A driving-like demo replaces repetitive min/max sweeps with smooth acceleration, deceleration, coasting and partial-range reversals. Demo data can also be sent to wireless clients, including from a headless node.
+
+## Headless mode — a dedicated CAN-to-wireless gateway
+
+M-Gauge can now operate without a display as a **headless node**. One unit connects to the vehicle CAN bus and forwards data to the gauges in your ESP-NOW network.
+
+Headless mode skips display and touch initialization, LVGL graphics, decoded images and the large graphics buffers, freeing RAM for gateway operation. Its Wi-Fi configuration access and web server remain available, so you can manage the node through the main configuration page and Live setup.
+
+Normal CAN processing and ESP-NOW forwarding continue while browsing in headless mode. Remote pairing, configuration and demo-data generation make it possible to set up and test a display-free installation. Firmware updates pause telemetry, and configuration or radio changes can briefly interrupt communication.
+
+Enable `SETTING:headlessMode:1` in `setup.conf` and reboot. Set it back to `0` and reboot to restore display operation.
+This mode allow user to run M-Gauge in basically any EPS32-S3-16-8 Board, and use it as a wireless gateway to supported M-Gauge displays.
 
 **M-Gauge 2.0 combines a customizable instrument, a sensor display, a wireless CAN gateway and a browser-managed gauge network in one firmware platform.**
 
@@ -157,7 +158,11 @@ ___
 - SN65HVD230 transceiver connected to the configured ESP32 TWAI/CAN pins
 - 12V->5V DC-DC Step Down regulator suitable for automotive use  
 - Optional SD card for loading of external configurations and custom images(SD CARD NO LONGER REQUIRED! All configurations changes can be made via WebConfiguration)
-- 3D-model for 3D Printed enclosure available 
+- 3D-model for 3D Printed enclosure available
+<img width="469" height="300" alt="M-Gauge_wiring_simplified" src="https://github.com/user-attachments/assets/0b8b9b76-558a-432f-93eb-d238d0c50ac9" />
+<img width="469" height="300" alt="M-Gauge_wiring_LCD4_simplified" src="https://github.com/user-attachments/assets/53b090a7-70b2-4fa4-8098-e15aaf50a7dd" />
+
+
 ---
 
 ## Features
@@ -1116,6 +1121,12 @@ ERROR:12,text=Coolant temperature sensor fault
 ```
 
 Restart M-Gauge after replacing `canmap.conf` so the new mapping is loaded.
+
+**Short teaser video below**
+
+[VIDEO of M-Gauge features](https://flic.kr/p/2snAxms)
+
+
 
 ### Headless CAN/ESP-NOW gateway
 
