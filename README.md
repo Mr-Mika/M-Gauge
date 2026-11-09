@@ -1,19 +1,14 @@
 
 # M-Gauge
 
-
 **M-Gauge** is a customizable digital gauge display for land based vehicles, designed to present engine and vehicle information clearly, efficiently, and with style. M-Gauge renders configurable gauge screens, receives ECU data over CAN bus, supports user configurable favorites/settings and custom background images  stored internally, includes optional WiFi, Web configuration utility, and ESP-NOW wireless gauge feature.
 <img width="1054" height="136" alt="M-Gauge_githun_header_2" src="https://github.com/user-attachments/assets/7ec34bf1-8416-477b-9aca-12d3db672f73" />
 
+3 development board displays are supported:
+The original the **LilyGO T-Display S3 AMOLED 1.75" round display** featuring an **ESP32-S3 microcontroller**
+* https://lilygo.cc/products/t-display-s3-amoled-1-64
 
-Built around the **LilyGO T-Display S3 AMOLED 1.75" round display** featuring an **ESP32-S3 microcontroller**.
-
-https://lilygo.cc/products/t-display-s3-amoled-1-64
-
-Other ESP32-S3 based round display modules (Waveshare, etc.) should work with minor modifications.
-
-___
-**UPDATE!** Waveshare ESP32-S3 1.75 AMOLED and ESP32-S3 4"LCD square format development boards tested and working with M-Gauge!
+--
 
 Waveshare ESP32-S3 Round 1.75" Brings also additional new and cool features like built-in 3-axis accelorometer, etc.. 
 * https://www.waveshare.com/esp32-s3-touch-amoled-1.75.htm
@@ -36,10 +31,128 @@ ___
 [VIDEO of M-Gauge features](https://flic.kr/p/2snAxms)
 
 
+# M-Gauge 2.0 is here! — More than just a gauge
+
+M-Gauge 2.0 brings together the new and exciting features: deeper visual customization, more onboard sensor inputs, a redesigned browser interface, display-free gateway operation, and more capable wireless ESP-NOW gauge networks.
+
+Whether you want one personalized instrument or several linked displays sharing a single CAN connection, this release gives you more control over how your M-Gauge system looks and works.
+
+## Native ESP-IDF and expanded hardware support
+
+The firmware now runs natively on ESP-IDF, with dedicated display and touch support for:
+
+- LilyGo 1.75-inch round AMOLED.
+- Waveshare 1.75-inch round AMOLED.
+- Waveshare 4-inch LCD, using the supported LCD4 board profile.
+
+Hardware-specific features depend on the fitted sensors and selected board profile. In particular, microphone input and the drag performance meter are currently available on the Waveshare round build, not every supported board.
+
+## Make the display your own
+
+- **Independent colors:** customize main numeric values, normal dial ticks, alarm-limit ticks, simple-gauge bars and arcs, and vector needles. Use the setup color sliders or edit the individual RGB hex colors in `setup.conf`.
+- **Custom needle styles:** choose a built-in or custom image, a generated **Vector image**, or a live-rendered **Vector needle**. Configure vector needle base width, tip width and length, plus individual needle pivot positions and radial offsets.
+- **Adjustable layouts:** reposition the main values and description labels on needle screens, including independent upper and lower labels on the dual-needle screen.
+- **More display choices:** select four- or eight-value dashboard layouts, adjust bar corner radius, use a horizontal simple-gauge bar, toggle its shadow, or hide numeric values on the needle screens.
+- **Custom artwork and animation:** use custom backgrounds, arcs, needle and button images. PNG images remain supported, with animated GIF support added for boot and dedicated button images. Boot animation plays once; button GIF animation runs while the button is pressed.
+- **Peak markers:** choose **Off**, **Lagging Max** for a held peak that fades away, or **Max Value** to retain the peak without fading. Multiple needles and bars track their peaks independently.
+- **Secondary-color locking:** tap the setup value to freeze a secondary color while adjusting the primary color. Keep complementary colors, choose matching colors, or create your own combination.
+
+Some advanced layout and geometry options are edited through `setup.conf`; everyday settings remain accessible from the gauge and Live setup.
+
+## A new web configuration experience
+
+The browser interface has a black-and-gold/bronze design, responsive controls, and firmware-version information in the page headers.
+
+The main configuration page lets you:
+
+- Load, edit and save `canmap.conf` and `setup.conf`.
+- Upload custom images, with format, dimension and file-size checks before activation.
+- View and download supported drag-performance SD logs.
+- Install application-only OTA firmware updates while preserving configuration and LittleFS files.
+
+### Live setup — adjust the gauge from your browser
+
+A separate **Live setup** page mirrors the supported setup dropdown and slider controls. Change settings in real time, preview color selections, use temporary value locks, and save your changes without editing configuration text.
+
+The ESP-NOW section shows the configured mode, saved host, registered clients and pairing status. Enable or disable ESP-NOW, change its role, start pairing, and start or stop demo mode remotely.
+
+Live setup provides live configuration controls and device status; it is not a streamed mirror of the gauge display or a live telemetry chart.
+
+## Headless mode — a dedicated CAN-to-wireless gateway
+
+M-Gauge can now operate without a display as a **headless node**. One unit connects to the vehicle CAN bus and forwards data to the gauges in your ESP-NOW network.
+
+Headless mode skips display and touch initialization, LVGL graphics, decoded images and the large graphics buffers, freeing RAM for gateway operation. Its Wi-Fi configuration access and web server remain available, so you can manage the node through the main configuration page and Live setup.
+
+Normal CAN processing and ESP-NOW forwarding continue while browsing in headless mode. Remote pairing, configuration and demo-data generation make it possible to set up and test a display-free installation. Firmware updates pause telemetry, and configuration or radio changes can briefly interrupt communication.
+
+Enable `SETTING:headlessMode:1` in `setup.conf` and reboot. Set it back to `0` and reboot to restore display operation.
+This mode allow user to run M-Gauge in basically any EPS32-S3-16-8 Board, and use it as a wireless gateway to supported M-Gauge displays.
+
+## Expanded ESP-NOW networking
+
+**One-to-many mode** lets one CAN-connected host supply several wireless M-Gauge clients, reducing the CAN wiring needed behind the dashboard.
+
+- Explicit pairing and saved host/client registrations simplify building a network that reconnects after reboot.
+- Client host-locking and optional host-MAC filtering help prevent accepting data from an unintended gauge.
+- Active-client tracking avoids treating every saved peer as currently connected.
+- Optional **M-Gauge frame bundling** carries several CAN frames in one ESP-NOW packet for more efficient transport.
+- Configurable peer rate, duplicate-frame interval and optional queue/latency diagnostics support installation-specific tuning.
+- Demo generation and forwarding run independently of the host graphics loop, so demanding host screens do not directly control the demo transmission schedule.
+
+**Security note:** pairing, peer registration and MAC filtering provide basic separation between gauge networks, not cryptographic security. The current ESP-NOW transport is unencrypted; do not treat it as confidential or protected against a deliberately spoofed sender.
+
+## Accelerometer inputs and drag performance
+
+On supported motion-sensor hardware, accelerometer and gyroscope axes can be configured as `INTERNAL:` signals and selected for display like ECU parameters. Scaling, offsets, zero calibration and the usual signal limits allow these inputs to be adapted to the installation. Enabled internal inputs can also be selected as the shift-light source.
+
+The **Waveshare round drag performance meter** adds:
+
+- **1/8-mile and 1/4-mile modes**, armed by a configurable CAN signal or status-bit trigger and started by detected launch acceleration.
+- **60 ft, 330 ft and 990 ft split times**, finish elapsed times and estimated finish speeds, plus elapsed time and distance from launch.
+- Results available as selectable gauge values, with launch, split and final-results popups.
+- An adjustable acceleration calibration factor.
+- Optional **100 ms SD logging**, including acceleration, performance values and a results summary. Up to 100 rotating log files can be opened or downloaded through web configuration.
+
+These are accelerometer-derived estimates, not a replacement for track timing. Mounting, vehicle pitch, vibration and sensor bias affect the results; compare and calibrate against reference measurements.
+
+## Microphone intensity and frequency inputs
+
+The Waveshare round board's dual microphones can now supply **sound intensity** and **dominant frequency** as selectable `INTERNAL:` signals.
+
+Choose Full Range, Bass, Midrange, Treble or a Custom frequency band. Custom low- and high-cut settings let you focus on a particular part of the sound spectrum, and the selected filtering also affects the intensity measurement.
+
+Microphone capture is demand-driven, and frequency analysis runs only when its output is needed. This avoids spending processing resources on unused audio inputs. Sound intensity is a relative level, not a calibrated sound-pressure reading in dB SPL.
+
+## Updated CAN buttons and visual status indicators
+
+Alongside the dedicated CAN-button screen, M-Gauge now supports **four additional customizable image buttons**, each with its own CAN event ID, across the supported builds.
+
+Use them as buttons, status indicators, or both:
+
+- Send a configured CAN event when pressed, including from an ESP-NOW client through its host.
+- Link each image to a `BIT:` status using visibility, flashing or opacity behavior.
+- Show actionable buttons dimmed when inactive, with a brighter pressed/active state.
+- Select status-screen, corner-button or supported gauge-overlay placement. Needle-screen overlays follow an upper arc inside the dial ticks; setup remains free of these controls.
+
+Updated CAN control handling also supports brightness, screen-selection and displayed-signal commands addressed to the gauge itself, while avoiding brightness retransmission loops.
+
+## More flexible signals, warnings and testing
+
+- Optional **`smoothingMs`** on CAN and internal signals steadies noisy values such as fuel level. Missing or zero leaves smoothing disabled, and raw telemetry remains unchanged.
+- Shared value formatting improves consistent scaling, signed values and decimal precision across screens.
+- Conditional **`VALUE:` and `UNIT:`** text overrides, linked unit conditions and configurable **`ERROR:`** descriptions make status messages more adaptable.
+- Expanded alarm/status displays, selectable shift-light sources and a separately adjustable **Shift Light Overlimit** threshold give more control over warnings.
+- Supported internal inputs include GPIO digital/analog measurements and external **INA226 bus-voltage monitoring**, with user-defined scaling.
+- A driving-like demo replaces repetitive min/max sweeps with smooth acceleration, deceleration, coasting and partial-range reversals. Demo data can also be sent to wireless clients, including from a headless node.
+
+**M-Gauge 2.0 combines a customizable instrument, a sensor display, a wireless CAN gateway and a browser-managed gauge network in one firmware platform.**
+
+
 ___
 ## Hardware
 
-- ESP32-S3 based round display board
+- ESP32-S3 based display board
 - SN65HVD230 transceiver connected to the configured ESP32 TWAI/CAN pins
 - 12V->5V DC-DC Step Down regulator suitable for automotive use  
 - Optional SD card for loading of external configurations and custom images
@@ -347,27 +460,6 @@ Alternatively, use esptools
 **NOTE! Upload the firmware before making any other physical connections to the display board and verify display functionality using the "Demo - mode" from setup page**
 ---
 ## Configuration
-
-Default persistent settings and favorites are stored in:
-```text
-setup.conf
-```
-ECU/display configuration can be loaded from  SD card as:
-```text
-canmap.conf
-```
-See attached setup.conf files
-
- * IF either of above files are present on SD card mounted to the gauge at boot time settings from those files are loaded to gauges internal memory
- * * **REMOVE SD CARD from device if you dont want ALL your settings to be reset all times!!**
-  
-### Configuration Web Server
-All settings found in setup.conf and canmap.conf can be edited directly in from a Web Browser
-* Enable Configuration Web Server and Wifi on the Setup page
-* Connect your wifi to M-Gauge access point
-* open your favorite browser and type in 192.168.0.10(0,1,2,3,4). The last number is the Gauge_ID of your M-Gauge, which you set in the Setup Page 
-<img width="400" height="860" alt="Configuration" src="https://github.com/user-attachments/assets/b52c6959-870f-4c1a-beec-86805ede102d" />
-
 # M-Gauge Configuration Guide
 
 M-Gauge uses two configuration files:
@@ -376,6 +468,71 @@ M-Gauge uses two configuration files:
 - `canmap.conf` tells M-Gauge how to read and display ECU CAN data and internal inputs.
 
 Both files are stored in LittleFS. A `canmap.conf` found on the SD card is copied to LittleFS during startup. Settings changed on the gauge are saved back to `setup.conf`, so manual changes to that file may later be overwritten.
+
+## Maximum value indicator
+
+`SETTING:maxValueIndicator:0` is **Off** (default), `1` is **Lagging Max**
+(the original hold/fade behavior), and `2` is **Max Value** (retain the peak
+without fading). All three options are available in setup and Live setup.
+A light-blue (`0xADD8E6`), 9px-thick line marks a rising value's peak
+once it starts falling: radial on needle screens 0–2 and the simple-gauge arc
+(`ui_Screen6`), perpendicular to the bars on `ui_Screen4` in either 4- or
+8-value mode. On `ui_Screen6` with only Bar enabled, a horizontal line marks
+the main signal's peak across the vertical bar, below the numeric text.
+Arc/Both modes retain the arc marker; Horizontal Bar and None have no marker.
+Hidden elements do not produce markers.
+In Lagging Max mode it holds for five seconds, then fades over 500 ms.
+Max Value mode remains fully visible until replaced by a higher peak or reset;
+smaller subsequent peaks do not replace it. Peaks are runtime-only, not saved.
+Each needle or bar has its own marker and independent hold/fade timer, allowing
+both needles or all visible bars to show peaks simultaneously. A higher value
+replaces only that element's held peak. Tracking uses the displayed, smoothed
+and limited value. Changing a favorite, hiding an element or changing its
+geometry resets only that element; screen or mode changes reset all markers. Headless
+mode creates no marker graphics.
+
+## CAN control commands
+
+CAN control commands require CAN Bus Link enabled and a hardware CAN filter
+that admits the command ID. Standard (11-bit), non-RTR frames with at least two
+bytes use byte 0 as the event and byte 1 as its value. Brightness (event `0x01`)
+accepts the gauge's own ID as well as its configured gauge-group IDs; screen
+change (`0x03`, screen 0–7) and displayed signal (`0x04`, signal slot index)
+target the gauge's own ID. For a single gauge at `0x500`, examples are
+`0x500: 01 B4` (brightness 180), `0x500: 03 02` (screen 2), and
+`0x500: 04 39` (signal 57 in the current screen's first value slot).
+Received CAN brightness is not retransmitted onto CAN; an ESP-NOW host can
+still synchronize it to clients. Local brightness changes continue to transmit.
+
+## Main value and description positions
+
+Label positioning on screens 0–2 is configured by the eight `Screen*MainValuePosition`
+and `Screen*TextLabelPosition` entries listed below. Each pair is the label centre
+in the centred 466×466 gauge canvas: X increases rightward, Y downward, and
+`233,233` is the centre. LCD4 adds its existing 7px canvas margin on each axis.
+The dual-needle screen has independent Upper and Lower entries. Missing entries
+use the original layout; invalid pairs are rejected without partially updating
+the position. Font/text changes preserve the centre. These options are file-only;
+upload `setup.conf` and restart to apply them.
+
+## Color sliders and manual RGB editing
+
+The five RGB settings below use exactly `0xRRGGBB` (for example `0xFF8000`).
+They override the remembered slider indices, regardless of file ordering.
+Older files without RGB entries retain their palette-derived colors; saving
+settings writes the resolved RGB entries. Manual RGB values load unchanged,
+even when the secondary color is unlocked.
+
+Click the setup value field for **Simple Gauge Color** or **Main values color**
+to freeze the secondary color. The field displays `(#RRGGBB)` in that color;
+moving the slider changes only the primary color. Click again to unlock and
+immediately restore automatic secondary coloring. Simple gauge uses RGB
+inversion; main values use complementary hue, or inverted gray brightness
+(white/white at the default). One shared runtime-only lock is released when
+another setting is selected or Setup is left, without changing the chosen RGB
+colors. The lock is never saved; the five RGB colors use the normal save workflow.
+
+Some other settings may also have the value freeze functionality to allow two values edited from teh same setup page. On **Shift light setpoint** tapping the value field locks teh setup value to allow  **shiftLightOverlimit** to be adjusted with the slider
 
 ## General value formats
 
@@ -408,15 +565,43 @@ SETTING:wifiEnabled:1
 | `gaugeCanId` | `0x300` to `0x500` | Base CAN ID used for communication between M-Gauges. The gauge ID is added to this value. |
 | `gaugeCount` | `1` to `16` | Total number of M-Gauges in the linked system. |
 | `selectedSetting` | menu row number | Remembers the last selected item on the Gauge Setup screen. Normally this should not be edited manually. |
-| `simpleGaugeIndicatorVersion` | `3` | Internal compatibility marker for the Simple Gauge Indicator setting. Keep this at `3`. |
-| `simpleGaugeIndicator` | `0` to `4` | Simple gauge indicator: `0` Bar, `1` Arc, `2` Arc Image, `3` None, `4` Both bar and arc. |
-| `simpleGaugeColor` | `0` to `255` | Color selection used by the simple gauge bar and all basic arcs. |
+| `Screen0MainValuePosition` | `x,y` (each -1024…1024) | Centre of `ui_LabelValue`; default `233,233`. |
+| `Screen0TextLabelPosition` | `x,y` (each -1024…1024) | Centre of `ui_Label3`; default `236,321`. |
+| `Screen1UpperMainValuePosition` | `x,y` (each -1024…1024) | Centre of `ui_DualGaugeValueUpper`; default `233,208`. |
+| `Screen1UpperTextLabelPosition` | `x,y` (each -1024…1024) | Centre of `ui_DualGaugeUpperLabel`; default `233,153`. |
+| `Screen1LowerMainValuePosition` | `x,y` (each -1024…1024) | Centre of `ui_DualGaugeValueLower`; default `233,258`. |
+| `Screen1LowerTextLabelPosition` | `x,y` (each -1024…1024) | Centre of `ui_DualGaugeLowerLabel`; default `233,313`. |
+| `Screen2MainValuePosition` | `x,y` (each -1024…1024) | Centre of `ui_GaugeValueUpper`; default `231,208`. |
+| `Screen2TextLabelPosition` | `x,y` (each -1024…1024) | Centre of `ui_GaugeUpperLabel`; default `231,153`. |
+| `simpleGaugeIndicator` | `0` to `5` | Simple gauge indicator: `0` Bar, `1` Arc, `2` Arc Image, `3` None, `4` Both bar and arc, `5` Horizontal Bar. |
+| `simpleGaugeColor` | `0` to `255` | Simple-gauge slider position and legacy color fallback; explicit RGB settings below take precedence. |
+| `simpleGaugeBarColor` | `0x000000` to `0xFFFFFF` | Actual bar RGB color, including its shadow. |
+| `simpleGaugeArcColor` | `0x000000` to `0xFFFFFF` | Actual basic-arc RGB color, including the simple gauge and needle-screen basic arcs. |
+| `mainValueColor` | `0x000000` to `0xFFFFFF` | Actual main numeric-value RGB color. |
+| `tickValueColor` | `0x000000` to `0xFFFFFF` | Main values color's secondary RGB: simple-gauge arc value and units caption. Does not affect dial ticks. |
+| `tickValuesColor` | `0` to `255` | Tick Value Color slider: 0 = white normal ticks / red alarm ticks; 1–10 = gray shades; 11–255 = hue with complementary alarm color. Applies to screens 0–2. |
+| `dialTickColor` | `0x000000` to `0xFFFFFF` | Explicit normal dial-tick RGB, independent of Main values color. |
+| `dialAlarmTickColor` | `0x000000` to `0xFFFFFF` | Explicit RGB for ticks at or above alarmLimit; default `0xA91A1A`. Tap the Tick Value Color setup value to freeze this secondary color, shown as `(#RRGGBB)`, while adjusting normal ticks. Tap again to restore complementary coloring (white uses default red). The lock clears on leaving the option and is not saved. |
+| `vectorNeedleColorRgb` | `0x000000` to `0xFFFFFF` | Actual RGB color for both generated-image and live vector needles. |
+| `screen3Type` | `4` or `8` | Setup option **Screen3 type**. Default 8 retains the original layout and 32px bars. 4 shows slots 1–4 in two rows closer to the center, with 60px value fonts and 48px bars, plus slot 8 centered at the top with a 25px caption underneath (no bar). Hidden slots keep their selections. |
+| `screen3BarRadius` | `0` to `20` | Configuration-only corner radius in pixels for both the background and fill of all Screen3 bars. Default 0 (square corners). |
+| `mainValuesColor` | `0` to `255` | 0 = white/white; 1–10 = light-to-dark gray (230 to 50); 11–255 = hue selection. Controls main numeric values and the complementary simple-gauge arc value/units caption, not dial ticks. Out-of-range value blinking temporarily overrides the base colors. |
+| `simpleGaugeBarShadow` | `0` or `1` | Enables the shadow around the Screen 6 simple-gauge bar. |
 | `simpleOverlayImage` | `0` or `1` | Shows the custom `GaugeBG5.png` overlay on the simple gauge when enabled. |
 | `limitGaugeValues` | `0` or `1` | Keeps displayed values within the `min` and `max` limits defined in `canmap.conf`. |
 | `showNeedle` | `0` to `2` | Main gauge indicator: `0` Arc, `1` Needle and arc, `2` Needle only. |
-| `needleType` | `0` or `1` | Needle image: `0` built-in needle, `1` custom `Needle.png`. |
+| `needleType` | `0` to `3` | Needle style: `0` built-in image, `1` custom `Needle.png`, `2` generated and rotated `Vector image`, `3` live-rendered polygon `Vector needle`. |
+| `vectorNeedleColor` | `0` to `255` | Vector needle slider position and legacy fallback; `vectorNeedleColorRgb` takes precedence. |
+| `Screen0NeedlePivotPoint` | `x,y,radial` | Screen 0 needle pivot and signed radial root offset in pixels. Default: `233,233,57`. |
+| `Screen1UpperNeedlePivotPoint` | `x,y,radial` | Screen 1 upper-needle pivot and signed radial root offset in pixels. Default: `233,233,57`. |
+| `Screen1LowerNeedlePivotPoint` | `x,y,radial` | Screen 1 lower-needle pivot and signed radial root offset in pixels. Default: `233,233,57`. |
+| `Screen2NeedlePivotPoint` | `x,y,radial` | Screen 2 needle pivot and signed radial root offset in pixels. Default: `233,233,57`. |
+| `VectorNeedleDimensions` | `base,tip,length` | Global symmetrical vector-needle trapezoid dimensions in pixels. Default: `20,4,154`. Base width: `2`–`200`; tip width: `1`–base width; length: `16`–`400`. |
 | `arcType` | `0` or `1` | Arc style on gauge screens 1 to 3: `0` custom image, `1` basic colored arc. |
+| `showNumericValues` | `0` or `1` | Show the live numeric value labels on needle screens 1 to 3. |
 | `chartUpdateRateMs` | `0` to `100` | Delay between chart updates in milliseconds. Lower values are faster but use more processing power. |
+
+Needle pivot coordinates are absolute display coordinates: X increases to the right and Y increases downward. The radial value positions the inner/root edge of the image or vector needle along its rotation radius. Positive values move the graphic away from the pivot; negative values move its root across the pivot. The four pivot parameters and `VectorNeedleDimensions` are edited directly in `setup.conf` and do not appear on the on-screen Setup page. Pivot values are accepted from `-1024` through `1024`; missing or malformed rows retain their defaults. Vector dimensions apply to all vector needles on screens 0–2, and a malformed dimensions row retains `20,4,154`.
 
 ## Startup and button settings
 
@@ -436,43 +621,116 @@ SETTING:wifiEnabled:1
 | `canTxPin` | `0` to `48` | GPIO pin connected to CAN transmit (TX). Use the value required by your board wiring. |
 | `canRsPin` | `-1` to `48` | GPIO pin used for CAN transceiver standby or mode control. Use `-1` when it is not connected. |
 
+Both Arduino and native ESP-IDF builds load these three CAN pins from `setup.conf` before initializing TWAI. In the ESP-IDF build, the corresponding Kconfig values are used only when `setup.conf` cannot be loaded. RX and TX must use different GPIO pins. On Round_base, the SD-card SPI bus is released before TWAI claims a configured pin such as GPIO 41.
+
 ## WiFi, ESP-NOW, and debugging
 
 | Parameter | Values | Description |
 |---|---:|---|
 | `wifiEnabled` | `0` or `1` | Enables the M-Gauge WiFi access point. |
-| `wifiPassword` | 8 to 10 characters | Password for the M-Gauge WiFi access point. Default WiFi password:12345678 |
+| `wifiPassword` | 8 to 10 characters | Password for the M-Gauge WiFi access point. |
 | `espNowEnabled` | `0` or `1` | Enables wireless ESP-NOW communication between gauges. |
 | `espNowHostMode` | `0` to `2` | ESP-NOW role: `0` Client, `1` Host, `2` One-to-many host. |
-| `espNowMacFilter` | `0` or `1` | Allows a client to accept data only from its saved host when enabled. |
+| `espNowMacFilter` | `0` or `1` | When enabled, a client accepts normal and pairing traffic only from `espNowHostMac`. If no host has been saved yet, an explicit pairing handshake may establish it. The saved host MAC is shown on the MAC-filter setup page. |
+| `espNowPeerRate` | `0`, `1`, `6`, `12`, or `24` | ESP-NOW transmit rate in Mbps. `0` retains the ESP-IDF driver default. The current test default is `6`. |
+| `espNowDuplicateFrameIntervalMs` | `5` to `1000` ms | Minimum resend interval for an unchanged CAN frame with the same CAN ID. Changed frames remain immediate. |
+| `espNowDiagnostics` | `0` or `1` | Enables a five-second ESP-NOW diagnostic summary containing average/maximum TX queue wait, send-callback latency, average/maximum RX queue wait, current/maximum queue depths, and drop counts. The separate LCD4 UI/render, RGB-copy and telemetry-lock timing test is disabled by default and also requires its compile switch; see [LCD4 timing test](test/LCD4_UPDATE_TIMING.md). These are local processing measurements, not synchronized one-way radio latency. |
+| `espNowMGaugeProtocol` | `0` or `1` | M-Gauge CAN transport: `0` sends one CAN frame per ESP-NOW packet; `1` sends up to eight CAN frames per bundle, with a nominal 5 ms collection timeout serviced by the TX worker independently of graphics. Scheduling and radio transmission can add delay. Receivers accept both formats. |
 | `espNowHostMac` | MAC address | Saved host address, for example `AA:BB:CC:DD:EE:FF`. This is normally managed automatically. |
 | `espNowPeerMacs` | MAC address list | Comma-separated list of ESP-NOW peers. This is normally managed automatically. |
-| `telnetEnabled` | `0` or `1` | Enables remote debug messages over the network. |
+| `telnetEnabled` | `0` or `1` | Enables the decoded CAN-signal and `INTERNAL:` ASCII stream on TCP port 2323. |
 
 The **Web Config Server** switch is controlled from the Gauge Setup screen. It is not currently stored as a separate `setup.conf` parameter.
+
+### Live setup in the browser
+
+Enable **Web Config Server**, open the configuration address shown on the gauge,
+then choose **Live setup** in the top header (or open `/live-setup` directly).
+
+The separate page mirrors the physical setup dropdown and slider, including
+board-specific options, colors, temporary value locks and ESP-NOW pairing.
+Browser selection does not move the gauge's selected setup row.
+The ESP-NOW section includes **Start Demo / Stop Demo** beside **Start Pairing**, a runtime-only
+toggle using the same synthetic CAN generator as the physical Demo switch. In
+ESP-NOW Host/One-to-many mode it forwards demo frames to clients, including while
+web configuration is open and in headless mode. CAN Bus Link is temporarily
+suspended during demo and restored on stopping unless explicitly changed. Demo
+does not start automatically after reboot. Generation pauses during file transfers
+and OTA; closing the browser does not stop it, so use **Stop Demo** when finished.
+Its header uses the same width and Gauge ID/CAN-Bus ID/IP information as the
+main configuration page. Both pages use black backgrounds, light bronze/gold
+accents and subtle panel shadows. Headers are text-only; boot images remain
+available for the gauge's boot splash and custom image uploads.
+
+Changes apply immediately to runtime. **Save settings** persists them atomically;
+existing pairing-related automatic saves still apply. Temporary locks are not
+saved. Connection-breaking options and destructive actions require confirmation.
+Turning Web Config Server Off reboots the gauge as before.
+
+Only one browser can edit live settings at a time. Closing/leaving the page
+releases its editor; a disconnected editor expires after 30 seconds. File/image
+uploads and OTA temporarily exclude live commands. During web maintenance only
+ESP-NOW control/pairing is retained, not normal gauge telemetry rendering.
+
+When switching back to the setup.conf file editor, first save any live changes,
+then **LOAD** the file before editing it. SAVE refuses stale revisions, including
+changes made on the physical setup page or by pairing. After SAVE, LOAD again
+before another file edit. LOAD is refused while live changes remain unsaved.
+Hidden text/coordinate/dimension settings still belong
+in setup.conf rather than the live dropdown.
+
+Client/one-to-many ESP-NOW pairing uses matching 20-second pairing windows on
+both gauges. A client request is accepted only by a one-to-many host whose
+pairing window is open; ordinary CAN or brightness traffic cannot establish a
+pairing. Disabling ESP-NOW resets `espNowMacFilter`, `espNowHostMac`, and
+`espNowPeerMacs`.
+
+### Demo mode
+
+Test M-Gauge without a live CAN connection using simulated driving data. Values accelerate, decelerate, coast and change direction smoothly instead of repeatedly sweeping between minimum and maximum.
+Demo data can also be sent over ESP-NOW to test wireless clients. Start or stop Demo Mode from the gauge’s setup screen or the web-based Live setup page—even on a headless gateway. 
+
+
+
+
 
 ## Shift light, alarms, and status
 
 | Parameter | Values | Description |
 |---|---:|---|
-| `revLimitSourceIndex` | `0` to `83` | Signal number from `canmap.conf` used to control the shift light. This is normally the RPM signal. |
+| `revLimitSourceIndex` | `0` to `83` (`94` on native Round_waveshare) | Signal number from `canmap.conf` used to control the shift light. This is normally the RPM signal. |
 | `shiftLight` | signal value | Value at which the shift light becomes active. Its unit follows the selected shift-light signal. |
 | `shiftLightStep` | signal value | Difference between the shift-light points of consecutive linked gauges. Use `0` for the same point on every gauge. |
-| `demoBoostLimitX10` | value x 10 | Boost warning limit in tenths of a bar. For example, `15` means `1.5 bar`. |
+| `shiftLightOverlimit` | scaled signal value (-1000000 to 1000000) | Independent red-background threshold for Shift Light Src. For RPM, `7000` means 7000 RPM; decimal values are accepted. Does not change the signal's alarmLimit or alarm ticks. If absent, initially uses the selected signal's alarmLimit; once resolved, normal settings saves persist it. |
+| `demoBoostLimitX10` | kPa | MAP pressure that activates the boost warning. The legacy setting name is retained for setup.conf compatibility; for example, `150` means `150 kPa`. |
 | `displayErrors` | `0` or `1` | Shows ECU error messages when enabled. |
 | `displayStatus` | `0` or `1` | Shows active status-bit messages when enabled. |
 | `alarmMonitorEnabled` | `0` or `1` | Monitors the signals listed in `ROLE:alarmMonitor` and warns when a limit is exceeded. |
+
+On **Shift Light Setpoint**, tap the value to lock the setpoint (parentheses).
+The slider then edits **Shift Light Overlimit**, displayed as `R=` in the limit
+preview, without changing the setpoint or step. Tap again to edit the setpoint.
+Leaving the option or Setup clears this temporary lock without changing either
+threshold. The slider uses the selected source's range and adjustment increments;
+the configuration file accepts fractional values directly. Save settings normally
+to retain either threshold. Setup and button screens remain excluded from
+shift-light background changes.
 
 ## Internal sensor settings
 
 | Parameter | Values | Description |
 |---|---:|---|
 | `accelerometerEnabled` | `0` or `1` | Enables the board motion sensor for accelerometer and gyroscope values. |
-| `internalInputsEnabled` | `0` or `1` | Enables user-defined GPIO inputs from `INTERNAL:` rows in `canmap.conf`. |
+| `dragMode` | `0`, `1`, or `2` | Native ESP-IDF Round_waveshare only: disables Drag mode, selects 1/8 mile, or selects 1/4 mile. Drag mode samples the QMI8658 independently of `accelerometerEnabled`. |
+| `dragCalibrationFactor` | `0.800` to `1.200` | Drag-only acceleration multiplier, rounded to `0.001` steps. Default `1.000`; editable in setup.conf, including through web configuration. Captured when the run is armed. |
+| `internalInputsEnabled` | `0` or `1` | Enables user-defined GPIO, I2C, and supported board-microphone inputs from `INTERNAL:` rows in `canmap.conf`. |
+| `microphoneFrequencyFilter` | `0` to `4` | Native Round_waveshare microphone band: Full range, Bass, Midrange, Treble, or Custom. |
+| `microphoneLowCutHz` | `1` to `10000` | Custom-mode high-pass cutoff. Default `50`; ignored by preset modes. |
+| `microphoneHighCutHz` | `1` to `10000` | Custom-mode low-pass cutoff. Default `10000`; ignored by preset modes. |
 
 ## Screen, selection, and favorite rows
 
-These rows do not begin with `SETTING:` DO NOT MODIFY THESE MANUALLY!.
+These rows do not begin with `SETTING:`.
 
 | Row | Description |
 |---|---|
@@ -565,6 +823,7 @@ SIGNAL:3,id=0x520,startBit=48,bitLength=16,endian=little,signed=1,factor=1,offse
 | `factor` | number | Multiplies the received value to convert it to the required scale. Usually `1`. |
 | `offset` | number | Amount added after the factor. Usually `0`. |
 | `scaling` | positive whole number | Divides the stored value for display. For example, stored value `123` with scaling `10` is shown as `12.3`. |
+| `smoothingMs` | `0` to `60000` | Optional display-smoothing time constant in milliseconds. Missing or `0` disables smoothing. Also supported on `INTERNAL:` rows. |
 | `min` | number | Lowest value used by the gauge scale and optional value limiting. |
 | `max` | number | Highest value used by the gauge scale and optional value limiting. |
 | `alarmLimitMin` | number | Low alarm point for this signal. |
@@ -618,6 +877,20 @@ UNIT:57,raw>10,text=Gear Failure
 
 Rules compare the stored value after `factor` and `offset`, but before `scaling`. M-Gauge supports up to 32 `VALUE:` rules and 32 `UNIT:` rules.
 
+Optional `link=` on a `UNIT:` rule selects another SIGNAL slot for the comparison:
+
+```ini
+UNIT:57,raw>10,text=Balls Failure,link=1
+```
+
+This changes signal 57's caption when signal 1's stored raw value exceeds 10;
+signal 57's numeric value is unchanged. Without `link=`, the rule checks its own
+signal as before. `LINK=` is also accepted. The link is a decimal SIGNAL slot,
+not a CAN ID or another UNIT rule. Forward references are supported; invalid or
+undefined links are ignored with a configuration warning. Matching rules retain
+file order (first match wins). Linked rules use the source's current stored value,
+including its initial value before reception; they do not add a freshness timeout.
+
 ## ECU error descriptions
 
 An `ERROR:` row gives a readable message to an ECU error code.
@@ -631,7 +904,39 @@ ERROR:12,text=Coolant temperature sensor fault
 | Number after `ERROR:` | ECU error code from `0` to `254`. |
 | `text` | Error message shown to the user. Use `|` where a line break is wanted. |
 
+M-Gauge loads up to 96 `ERROR:` descriptions. Description text may contain commas and is limited to 95 characters.
+
 Error messages are shown only when `SETTING:displayErrors:1` is enabled and the error role signals are configured.
+
+## Optional display smoothing
+
+Append `smoothingMs=<milliseconds>` to any `SIGNAL:` or `INTERNAL:` row:
+
+```text
+SIGNAL:73,id=0x52A,startBit=48,bitLength=16,endian=little,signed=0,factor=1,offset=0,scaling=10,min=0,max=100,name=L|Fuel Tank,smoothingMs=3000
+INTERNAL:28,source=I2C,device=INA226,address=0x40,mode=voltage,factor=1,offset=0,scaling=1000,min=0,max=36,name=V|Supply Voltage,smoothingMs=200
+```
+
+The time-aware exponential filter smooths numeric displays, needles, arcs, bars,
+and chart samples on all six gauge pages. It does not slow screen refreshing.
+`200` gives light smoothing; `3000` is a starting point for fuel level. After a
+step change, a 3000 ms filter reaches about 63% in 3 seconds and 95% in 9 seconds.
+It continues approaching the target between received samples, without overshoot.
+
+Raw stored values, alarms (including numeric alarm blinking), shift lights,
+Telnet, ESP-NOW, and `VALUE:`/`UNIT:` conditions are unchanged. Text overrides
+such as `N` display immediately; they are not interpolated. Keep gears, switches,
+and other discrete signals unsmoothed. `BIT:` indicators are unaffected.
+
+Missing or zero smoothing uses the original display path with no filter-state
+allocation or filtering calculations. Positive durations allocate a small state
+per signal, preferring PSRAM. The first successful sample displays immediately;
+failed reads are not treated as zero. Filters continue while their signals are
+hidden, and changing screens does not restart them. Reloading `canmap.conf`
+clears the old filters; re-enabling a physical INTERNAL input starts from its
+first fresh sample. Invalid durations (including negative, fractional, or values
+above 60000) are rejected. Smoothing is configured in `canmap.conf`, not as a
+global setup-page option.
 
 ## Internal motion sensors
 
@@ -649,12 +954,52 @@ INTERNAL:25,source=accelX,factor=1,offset=0,scaling=1000,min=-2,max=2,alarmLimit
 
 The display fields `name`, `scaling`, `min`, `max`, `alarmLimitMin`, `alarmLimit`, and `alarmSource` work the same way as on a `SIGNAL:` row. Enable `SETTING:accelerometerEnabled:1` to update these values.
 
+## Drag performance meter (native Round_waveshare)
+
+The ESP-IDF Round_waveshare build provides `SETTING:dragMode:1` for a 1/8-mile run and `SETTING:dragMode:2` for a 1/4-mile run. It is disabled with `0`. The trigger role may point to either a decoded bit or signal; the default is clutch-pedal BIT 9:
+
+```text
+ROLE:dragModeTrigger=BIT:9
+```
+
+The source must first be active and then transition from active to inactive. After that falling edge, the meter waits for a confirmed acceleration increase before starting its clock and showing `RACE!`. Timing-line crossings are interpolated between accelerometer samples. Results remain available until another trigger or a Drag mode change.
+
+`SETTING:dragCalibrationFactor:1.000` leaves the calculations unchanged. A value
+of `1.050` increases longitudinal acceleration by 5% before speed/distance
+integration; `0.950` reduces it by 5%. The real elapsed-time clock, launch
+threshold, baseline, launch direction, and other accelerometer consumers are
+unchanged. A run keeps the factor captured at arming, even if the setting later
+changes. Invalid/nonfinite/out-of-range file values are rejected; a missing
+setting defaults to `1.000`. SD logs record the captured factor in the summary
+header, retain the original XYZ and `longitudinal_g` measurements, and add
+`calibrated_longitudinal_g` alongside the calibrated performance results.
+
+Calibrate against multiple reference passes and intermediate times. A single
+multiplier cannot remove time-varying bias, vehicle pitch, or launch-timing
+differences. Finish speeds are instantaneous estimates, not speed-trap averages.
+
+The native Waveshare signal table reserves these computed values:
+
+| Signal | Value | Scaling |
+|---:|---|---:|
+| `84` | 60ft Time (s) | `1000` |
+| `85` | 330ft Time (s) | `1000` |
+| `86` | 990ft Time (s) | `1000` |
+| `87` | 1/4 Mile Speed (km/h) | `10` |
+| `88` | 1/4 Mile Time (s) | `1000` |
+| `89` | 1/8 Mile Speed (km/h) | `10` |
+| `90` | 1/8 Mile Time (s) | `1000` |
+| `91` | Time from start (s) | `1000` |
+| `92` | Distance from start (m) | `100` |
+
+These are calculated signals, not physical `INTERNAL:` sensor channels. Their `INTERNAL:` rows in the supplied `canmap.conf` provide display names, units, ranges, and scaling only. Accelerometer-only distance and speed are estimates: mounting alignment, vehicle pitch, vibration, sensor bias, wheelspin, and track gradient affect accuracy, so this feature must be calibrated and compared with track timing before treating its results as authoritative.
+
 ## Internal GPIO inputs
 
 An `INTERNAL:` row with `source=gpio` displays a digital or analog GPIO input as a gauge signal.
 
 ```text
-INTERNAL:28,source=gpio,pin=21,mode=analog_mv,invert=0,factor=1,offset=0,scaling=1000,min=0,max=3.3,alarmLimitMin=0,alarmLimit=3.3,alarmSource=0,name=V|Sensor Input
+INTERNAL:28,source=gpio,pin=1,mode=analog_mv,invert=0,factor=1,offset=0,scaling=1000,min=0,max=3.3,alarmLimitMin=0,alarmLimit=3.3,alarmSource=0,name=V|Sensor Input
 ```
 
 | Field | Values | Description |
@@ -680,9 +1025,69 @@ The display fields `name`, `scaling`, `min`, `max`, `alarmLimitMin`, `alarmLimit
 
 Current LilyGo GPIO allowlist: `1`, `2`, `3`, `5`, `21`, `38`, `39`, `45`, `46`, `47`. Up to six GPIO inputs can be configured. GPIO inputs are currently supported on the LilyGo build; Waveshare builds ignore them.
 
+Only GPIO `1`, `2`, `3`, and `5` in that allowlist are ADC-capable on ESP32-S3. Use the other allowed pins only with a digital mode.
+
 > Check the board wiring before selecting a pin. The user is responsible for choosing a suitable digital or analog pin and keeping the input voltage within the ESP32 electrical limits.
 
+## Internal I2C voltage input
+
+With `SETTING:internalInputsEnabled:1`, boot performs one general I2C0 address
+scan immediately before the INA226 identification probe. Serial output lists
+the board's SDA/SCL pins, responding addresses (`0x08` through `0x77`), and a
+summary. An acknowledged address indicates presence, not a confirmed device
+model. The scan reuses the existing bus without register reads/writes, stops
+on a bus fault or its one-second time budget, and is skipped if the bus is
+unavailable. Internal Inputs disabled means no general boot scan. The scan
+is not repeated during normal operation or when enabling inputs later.
+
+An `INTERNAL:` row with `source=I2C` can read the bus-voltage register of an INA226 connected to the LilyGo QWIIC connector. The QWIIC bus uses GPIO `7` for SDA and GPIO `6` for SCL and is shared safely with the touch controller.
+
+```text
+INTERNAL:28,source=I2C,device=INA226,address=0x40,mode=voltage,factor=1,offset=0,scaling=1000,min=0,max=36,alarmLimitMin=0,alarmLimit=15,alarmSource=0,name=V|Supply Voltage
+```
+
+| Field | Values | Description |
+|---|---:|---|
+| `source` | `I2C` | Selects an I2C device as the value source. |
+| `device` | `INA226` | Selects the supported monitor. `NA226` is accepted as an alias. |
+| `address` | `0x40` to `0x4F` | Seven-bit INA226 I2C address. Default is `0x40`. |
+| `mode` | `voltage` or `bus_voltage` | Reads the INA226 bus-voltage register. |
+| `factor` | number | Multiplies the millivolt reading. Usually `1`. |
+| `offset` | number | Amount added after the factor. Usually `0`. |
+
+The raw internal value is integer millivolts. Use `scaling=1000` to display volts. Enable `SETTING:internalInputsEnabled:1` to sample the device. Up to six GPIO and I2C inputs can be configured in total. INA226 current, shunt-voltage, and power measurements are not supported yet.
+
 An `INTERNAL:` definition replaces CAN decoding for the same signal number. Define `source` before the other input fields on that row.
+
+### Waveshare microphone intensity and frequency
+
+The native ESP-IDF `Round_waveshare` build can combine its two onboard ES7210 microphones into a logarithmic sound-intensity signal. The stored value is tenths of a percent, so use `scaling=10` for a displayed range of `0.0` to `100.0 %`:
+
+```text
+INTERNAL:93,source=microphone,factor=1,offset=0,scaling=10,min=0,max=100,alarmLimitMin=0,alarmLimit=100,alarmSource=0,name=%|Sound Intensity
+INTERNAL:94,source=microphoneFrequency,factor=1,offset=0,scaling=1,min=0,max=10000,alarmLimitMin=0,alarmLimit=10000,alarmSource=0,name=Hz|Dominant Frequency
+```
+
+Enable `Internal Inputs`, then select either microphone signal like any CAN
+signal. `Sound Intensity` is the filtered dual-microphone level.
+`Dominant Frequency` is a 1024-sample Hann-window FFT result, refreshed at
+about 10 Hz and constrained to the selected filter band. Below the frequency
+detector's silence threshold it reports `0 Hz`.
+
+The filter presets are Full range `50-10000 Hz`, Bass `50-250 Hz`, Midrange
+`250-2000 Hz`, and Treble `2000-10000 Hz`. Custom uses the two cutoff settings;
+normally the high cutoff should be at least the low cutoff. `factor` and `offset` remain available
+for installation-specific calibration.
+
+Microphone capture is demand-driven. The codec and I2S capture start only when
+a microphone signal is on the active gauge screen, is the Shift Light Src, is
+an enabled alarm-monitor signal, or a connected CAN ASCII Stream client needs
+INTERNAL values. Frequency analysis runs only while `Dominant Frequency` is
+demanded. After 1.5 seconds without a consumer, the codec is powered down.
+Merely listing the signal in Favorites does not activate sampling until that
+favorite is selected for display.
+
+The current `Waveshare_LCD4` software profile targets `ESP32-S3-Touch-LCD-4` V4 hardware, whose published pin map does not expose an ES7210/audio input. Do not copy the incompatible `Touch-LCD-4B` microphone pins into that profile; add a separate 4B board target if that is the fitted LCD4 hardware.
 
 ## Minimal canmap.conf example
 
@@ -710,5 +1115,38 @@ ERROR:12,text=Coolant temperature sensor fault
 ```
 
 Restart M-Gauge after replacing `canmap.conf` so the new mapping is loaded.
+
+### Headless CAN/ESP-NOW gateway
+
+`SETTING:headlessMode:0` is the default. Set it to `1` in `setup.conf`, save and
+reboot to run without a display. The mode is latched at boot: a web file reload
+does not initialize graphics while the gauge is running.
+
+Headless mode skips display/touch initialization, LVGL, draw buffers, decoded
+images, boot splash and graphics updates. SD boot synchronization reads only
+`canmap.conf`, not images. Enabled INTERNAL sensors can initialize their I2C bus
+without initializing touch. Compiled graphics code remains in the firmware.
+
+The Wi-Fi AP and configuration server remain available even with `wifiEnabled:0`
+and `webServerEnabled:0`. Use the existing Wi-Fi password and connect to
+`M-Gauge-AP_<gaugeId>` at `http://192.168.0.<100 + gaugeId>` (host number clamped
+to 100–199). The Live setup Web Config Server control is fixed On in headless
+mode. CAN decoding/forwarding and ESP-NOW continue while browsing, unlike normal
+display-mode web maintenance. Firmware updates pause telemetry; configuration
+reloads and radio changes can briefly interrupt it.
+
+Configure `canBusLink:1`, the correct CAN pins/speed/filter, `espNowEnabled:1`
+and `espNowHostMode:1` (Host) or `2` (One-to-many). Existing pairing, peer rate,
+MAC filtering and bundled-protocol settings are unchanged; headless mode does
+not automatically change the radio role or enable CAN. Keep `wifiEnabled:0` if
+you want to retain the usual STA ESP-NOW MAC while using the temporary web AP.
+
+`/health` reports `headless` (current boot mode) and `headlessModePending`
+(saved/configured mode differs from this boot). To restore graphics, save
+`SETTING:headlessMode:0` and power-cycle/reboot. A reboot is required; turning
+off the web server is intentionally unavailable while running headless.
+
+
+
 
 
