@@ -61,6 +61,8 @@ Some advanced layout and geometry options are edited through `setup.conf`; every
 
 The browser interface has a black-and-gold/bronze design, responsive controls, and firmware-version information in the page headers.
 
+<img width="400" height="600" alt="M-Gauge_web_configuration1" src="https://github.com/user-attachments/assets/c48aa7cb-5b49-43b8-86d2-16e37299bc37" />
+
 The main configuration page lets you:
 
 - Load, edit and save `canmap.conf` and `setup.conf`.
@@ -71,6 +73,8 @@ The main configuration page lets you:
 ### Live setup — adjust the gauge from your browser
 
 A separate **Live setup** page mirrors the supported setup dropdown and slider controls. Change settings in real time, preview color selections, use temporary value locks, and save your changes without editing configuration text.
+
+<img width="400" height="366" alt="M-Gauge_web_configuration2" src="https://github.com/user-attachments/assets/62ad6166-66ee-4282-ad27-7e02857e87c4" />
 
 The ESP-NOW section shows the configured mode, saved host, registered clients and pairing status. Enable or disable ESP-NOW, change its role, start pairing, and start or stop demo mode remotely.
 
