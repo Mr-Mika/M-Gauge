@@ -155,7 +155,7 @@ ___
 - ESP32-S3 based display board
 - SN65HVD230 transceiver connected to the configured ESP32 TWAI/CAN pins
 - 12V->5V DC-DC Step Down regulator suitable for automotive use  
-- Optional SD card for loading of external configurations and custom images
+- Optional SD card for loading of external configurations and custom images(SD CARD NO LONGER REQUIRED! All configurations changes can be made via WebConfiguration)
 - 3D-model for 3D Printed enclosure available 
 ---
 
@@ -265,7 +265,7 @@ Choose from **6 different screen layouts**:
 * Most of the gauge parameters can be changed here
 * Changes take effect immediately, but are stored permanently ONLY when swipe up/down is done in any of the gauge data screens
 * Some parameters are only avalailable on the text configuration files setup.conf
-  * Customized version of these configuration files can be loaded on SD-card. IF SD-card is present and files are found,settings are read during gauge boot sequence and stored in gauge internal memory.  
+  
 ---
 
 ## Shift Light
@@ -295,7 +295,7 @@ Factory OBD, PID polling type CAN-Bus devices are not supported.
 
 ----
 **Note!** This part has been largely replaced by the **Configuration web server** interface. 
-SD-Card is not required run M-Gauge!
+SD-Card is **NOT** required run M-Gauge!
 
 * On M-Gauge boot, firmware checks SD for file with name /canmap.conf.
 * This file contains all information for CAN-Bus message decoding, ID, min/max values, alarm limits and name&units used on screen. 
@@ -467,7 +467,7 @@ M-Gauge uses two configuration files:
 - `setup.conf` stores gauge settings, favorites, and the startup screen.
 - `canmap.conf` tells M-Gauge how to read and display ECU CAN data and internal inputs.
 
-Both files are stored in LittleFS. A `canmap.conf` found on the SD card is copied to LittleFS during startup. Settings changed on the gauge are saved back to `setup.conf`, so manual changes to that file may later be overwritten.
+Both files are stored in M-Gauge internal memory. 
 
 ## Maximum value indicator
 
