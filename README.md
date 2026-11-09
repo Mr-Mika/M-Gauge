@@ -32,10 +32,11 @@ ___
 
 
 # M-Gauge 2.0 is here! — More than just a gauge
-
 M-Gauge 2.0 brings together the new and exciting features: deeper visual customization, more onboard sensor inputs, a redesigned browser interface, display-free gateway operation, and more capable wireless ESP-NOW gauge networks.
 
 Whether you want one personalized instrument or several linked displays sharing a single CAN connection, this release gives you more control over how your M-Gauge system looks and works.
+
+https://github.com/Mr-Mika/M-Gauge/tree/main/Firmware/M-Gauge%202.0
 
 ## Native ESP-IDF and expanded hardware support
 
