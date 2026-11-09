@@ -443,11 +443,16 @@ Works from both:
    * Step / STL file available for download
 
 * **NOTE!! Waveshare LCD4 display only requires change of settings in setup.conf to CAN_RX Pin 0 , CAN_TX pin 6. For Waveshare LCD4, CAN-Bus Connectivity and 5V Power supply installation is not required as the board contains all these items from the factory**  
----
 
-# Roadmap
+### Plug & Play gauge cluster using Waveshare LCD4 as wireless hub
+This multi M-Gauge setup requires no additional hardware, only simple wiring and careful connections to correct input pins on the boards. Only LCD4 is connect to vehicle CAN-Bus other gauges are wireless! 
 
-### Planned Features
+<img width="800" height="512" alt="M-Gauge_PnP_wiring" src="https://github.com/user-attachments/assets/bef2c7db-6c12-48ed-b581-a2b6f9e08e50" />
+
+Connecting 2 round devices to LCD4 +5V VCC is safe, possibly up to 3 devices is still safe, more than that can be overloading the LCD4's voltage regulation circuit.
+* Similar wiring setup can be used with other ESP32 devices that have built in voltage regulation and CAN-Bus connectivity(must be setup as M-Gauge headless mode)
+* LilyGo T-2CAN or similar device
+* https://lilygo.cc/products/t-2can?srsltid=AYCX9vKbwLe_V-mCvjKKe_4m5SCWXyjG0KkLGAF50CY2CmWf41H7IyYA 
 
 ---
 
