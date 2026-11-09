@@ -32,7 +32,7 @@ ___
 
 
 # M-Gauge 2.0 is here! — More than just a gauge
-M-Gauge 2.0 brings together the new and exciting features: deeper visual customization, more onboard sensor inputs, a redesigned browser interface, display-free gateway operation, and more capable wireless ESP-NOW gauge networks.
+M-Gauge 2.0 brings together new and exciting features: deeper visual customization, more onboard sensor inputs, a redesigned browser interface, display-free gateway operation, and more capable wireless ESP-NOW gauge networks.
 
 Whether you want one personalized instrument or several linked displays sharing a single CAN connection, this release gives you more control over how your M-Gauge system looks and works.
 
