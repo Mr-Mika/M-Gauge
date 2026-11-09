@@ -146,7 +146,8 @@ Headless mode skips display and touch initialization, LVGL graphics, decoded ima
 Normal CAN processing and ESP-NOW forwarding continue while browsing in headless mode. Remote pairing, configuration and demo-data generation make it possible to set up and test a display-free installation. Firmware updates pause telemetry, and configuration or radio changes can briefly interrupt communication.
 
 Enable `SETTING:headlessMode:1` in `setup.conf` and reboot. Set it back to `0` and reboot to restore display operation.
-This mode allow user to run M-Gauge in basically any EPS32-S3-16-8 Board, and use it as a wireless gateway to supported M-Gauge displays.
+- This mode allow user to run M-Gauge 2.0 in basically any EPS32-S3-16-8 Board, and use it as a wireless gateway to supported M-Gauge displays.
+
 
 **M-Gauge 2.0 combines a customizable instrument, a sensor display, a wireless CAN gateway and a browser-managed gauge network in one firmware platform.**
 
