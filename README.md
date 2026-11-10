@@ -639,7 +639,7 @@ Both Arduino and native ESP-IDF builds load these three CAN pins from `setup.con
 | Parameter | Values | Description |
 |---|---:|---|
 | `wifiEnabled` | `0` or `1` | Enables the M-Gauge WiFi access point. |
-| `wifiPassword` | 8 to 10 characters | Password for the M-Gauge WiFi access point. |
+| `wifiPassword` | 8 to 10 characters | Password for the M-Gauge WiFi access point. **Default WiFi password: 12345678**|
 | `espNowEnabled` | `0` or `1` | Enables wireless ESP-NOW communication between gauges. |
 | `espNowHostMode` | `0` to `2` | ESP-NOW role: `0` Client, `1` Host, `2` One-to-many host. |
 | `espNowMacFilter` | `0` or `1` | When enabled, a client accepts normal and pairing traffic only from `espNowHostMac`. If no host has been saved yet, an explicit pairing handshake may establish it. The saved host MAC is shown on the MAC-filter setup page. |
