@@ -10,7 +10,7 @@ The original **LilyGO T-Display S3 AMOLED 1.75" round display** featuring an **E
 * https://lilygo.cc/products/t-display-s3-amoled-1-64
   
 
-Waveshare ESP32-S3 Round 1.75" Brings also additional new and cool features like built-in 3-axis accelorometer, etc.. 
+Waveshare ESP32-S3 Round 1.75" Brings also additional cool features like built-in 3-axis accelorometer, etc.. 
 * https://www.waveshare.com/esp32-s3-touch-amoled-1.75.htm
   
 
