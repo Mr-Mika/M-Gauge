@@ -371,11 +371,6 @@ Works from both:
 * Directly connected M-Gauges
 * ESP-NOW wireless M-Gauges
 
-### Downside of wireless communication  
- * Currently all ESP-NOW communication in M-Gauge is just broadcasted from the host, unencryped, so basically anyone within range could pick up your engine data
- * Anyone within the range can activate your wireless button
- * Some fixes to this will come in future updates 
-
 ---
 
 ## Boost level warning system
