@@ -6,7 +6,7 @@
 
 3 development board displays are supported:
 
-The original the **LilyGO T-Display S3 AMOLED 1.75" round display** featuring an **ESP32-S3 microcontroller**
+The original **LilyGO T-Display S3 AMOLED 1.75" round display** featuring an **ESP32-S3 microcontroller**
 * https://lilygo.cc/products/t-display-s3-amoled-1-64
   
 
