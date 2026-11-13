@@ -480,70 +480,19 @@ M-Gauge uses two configuration files:
 
 Both files are stored in M-Gauge internal memory. 
 
-## Maximum value indicator
+## Web configurator 
+M-gauge configuration files are most easily edited from the built-in web configuration tool which you can access with your browser after enabling the **Web Config Server** from M-Gauge setup page. **Web Config Server** will activate a wireless access point the user can connect with their wireless device, computer or mobile device.
 
-`SETTING:maxValueIndicator:0` is **Off** (default), `1` is **Lagging Max**
-(the original hold/fade behavior), and `2` is **Max Value** (retain the peak
-without fading). All three options are available in setup and Live setup.
-A light-blue (`0xADD8E6`), 9px-thick line marks a rising value's peak
-once it starts falling: radial on needle screens 0–2 and the simple-gauge arc
-(`ui_Screen6`), perpendicular to the bars on `ui_Screen4` in either 4- or
-8-value mode. On `ui_Screen6` with only Bar enabled, a horizontal line marks
-the main signal's peak across the vertical bar, below the numeric text.
-Arc/Both modes retain the arc marker; Horizontal Bar and None have no marker.
-Hidden elements do not produce markers.
-In Lagging Max mode it holds for five seconds, then fades over 500 ms.
-Max Value mode remains fully visible until replaced by a higher peak or reset;
-smaller subsequent peaks do not replace it. Peaks are runtime-only, not saved.
-Each needle or bar has its own marker and independent hold/fade timer, allowing
-both needles or all visible bars to show peaks simultaneously. A higher value
-replaces only that element's held peak. Tracking uses the displayed, smoothed
-and limited value. Changing a favorite, hiding an element or changing its
-geometry resets only that element; screen or mode changes reset all markers. Headless
-mode creates no marker graphics.
+Use the existing Wi-Fi password and connect to: `M-Gauge-AP_<gaugeId>` at `http://192.168.0.<100 + gaugeId>`
 
-## CAN control commands
+<img width="800" height="1200" alt="M-Gauge_web_configuration1_larger" src="https://github.com/user-attachments/assets/fce36f23-5311-48ba-9363-f719f6e8a1a9" />
 
-CAN control commands require CAN Bus Link enabled and a hardware CAN filter
-that admits the command ID. Standard (11-bit), non-RTR frames with at least two
-bytes use byte 0 as the event and byte 1 as its value. Brightness (event `0x01`)
-accepts the gauge's own ID as well as its configured gauge-group IDs; screen
-change (`0x03`, screen 0–7) and displayed signal (`0x04`, signal slot index)
-target the gauge's own ID. For a single gauge at `0x500`, examples are
-`0x500: 01 B4` (brightness 180), `0x500: 03 02` (screen 2), and
-`0x500: 04 39` (signal 57 in the current screen's first value slot).
-Received CAN brightness is not retransmitted onto CAN; an ESP-NOW host can
-still synchronize it to clients. Local brightness changes continue to transmit.
+Once configuration files have been changed and file/files saved, M-Gauge needs to be restarted , this can be done by switching off **Web Config Server** which will automatically reboot the system, or by manually, by switching OFF power.
+**Web Config Server** is not intended to be running contiously in the backround, except when M-Gauge is set running in **Headless mode**.
 
-## Main value and description positions
+** in **Headless mode**, **Web Config Server** is running continuously, to provide user interface for ESP32 units used as CAN->ESP-Now gateway devices that do not have a display. Read more about M-Gauge headless mode at the end of this document. 
 
-Label positioning on screens 0–2 is configured by the eight `Screen*MainValuePosition`
-and `Screen*TextLabelPosition` entries listed below. Each pair is the label centre
-in the centred 466×466 gauge canvas: X increases rightward, Y downward, and
-`233,233` is the centre. LCD4 adds its existing 7px canvas margin on each axis.
-The dual-needle screen has independent Upper and Lower entries. Missing entries
-use the original layout; invalid pairs are rejected without partially updating
-the position. Font/text changes preserve the centre. These options are file-only;
-upload `setup.conf` and restart to apply them.
 
-## Color sliders and manual RGB editing
-
-The five RGB settings below use exactly `0xRRGGBB` (for example `0xFF8000`).
-They override the remembered slider indices, regardless of file ordering.
-Older files without RGB entries retain their palette-derived colors; saving
-settings writes the resolved RGB entries. Manual RGB values load unchanged,
-even when the secondary color is unlocked.
-
-Click the setup value field for **Simple Gauge Color** or **Main values color**
-to freeze the secondary color. The field displays `(#RRGGBB)` in that color;
-moving the slider changes only the primary color. Click again to unlock and
-immediately restore automatic secondary coloring. Simple gauge uses RGB
-inversion; main values use complementary hue, or inverted gray brightness
-(white/white at the default). One shared runtime-only lock is released when
-another setting is selected or Setup is left, without changing the chosen RGB
-colors. The lock is never saved; the five RGB colors use the normal save workflow.
-
-Some other settings may also have the value freeze functionality to allow two values edited from teh same setup page. On **Shift light setpoint** tapping the value field locks teh setup value to allow  **shiftLightOverlimit** to be adjusted with the slider
 
 ## General value formats
 
@@ -653,10 +602,78 @@ Both Arduino and native ESP-IDF builds load these three CAN pins from `setup.con
 
 The **Web Config Server** switch is controlled from the Gauge Setup screen. It is not currently stored as a separate `setup.conf` parameter.
 
+## Maximum value indicator
+
+`SETTING:maxValueIndicator:0` is **Off** (default), `1` is **Lagging Max**
+(the original hold/fade behavior), and `2` is **Max Value** (retain the peak
+without fading). All three options are available in setup and Live setup.
+A light-blue (`0xADD8E6`), 9px-thick line marks a rising value's peak
+once it starts falling: radial on needle screens 0–2 and the simple-gauge arc
+(`ui_Screen6`), perpendicular to the bars on `ui_Screen4` in either 4- or
+8-value mode. On `ui_Screen6` with only Bar enabled, a horizontal line marks
+the main signal's peak across the vertical bar, below the numeric text.
+Arc/Both modes retain the arc marker; Horizontal Bar and None have no marker.
+Hidden elements do not produce markers.
+In Lagging Max mode it holds for five seconds, then fades over 500 ms.
+Max Value mode remains fully visible until replaced by a higher peak or reset;
+smaller subsequent peaks do not replace it. Peaks are runtime-only, not saved.
+Each needle or bar has its own marker and independent hold/fade timer, allowing
+both needles or all visible bars to show peaks simultaneously. A higher value
+replaces only that element's held peak. Tracking uses the displayed, smoothed
+and limited value. Changing a favorite, hiding an element or changing its
+geometry resets only that element; screen or mode changes reset all markers. Headless
+mode creates no marker graphics.
+
+## CAN control commands
+
+CAN control commands require CAN Bus Link enabled and a hardware CAN filter
+that admits the command ID. Standard (11-bit), non-RTR frames with at least two
+bytes use byte 0 as the event and byte 1 as its value. Brightness (event `0x01`)
+accepts the gauge's own ID as well as its configured gauge-group IDs; screen
+change (`0x03`, screen 0–7) and displayed signal (`0x04`, signal slot index)
+target the gauge's own ID. For a single gauge at `0x500`, examples are
+`0x500: 01 B4` (brightness 180), `0x500: 03 02` (screen 2), and
+`0x500: 04 39` (signal 57 in the current screen's first value slot).
+Received CAN brightness is not retransmitted onto CAN; an ESP-NOW host can
+still synchronize it to clients. Local brightness changes continue to transmit.
+
+## Main value and description positions
+
+Label positioning on screens 0–2 is configured by the eight `Screen*MainValuePosition`
+and `Screen*TextLabelPosition` entries listed below. Each pair is the label centre
+in the centred 466×466 gauge canvas: X increases rightward, Y downward, and
+`233,233` is the centre. LCD4 adds its existing 7px canvas margin on each axis.
+The dual-needle screen has independent Upper and Lower entries. Missing entries
+use the original layout; invalid pairs are rejected without partially updating
+the position. Font/text changes preserve the centre. These options are file-only;
+upload `setup.conf` and restart to apply them.
+
+## Color sliders and manual RGB editing
+
+The five RGB settings below use exactly `0xRRGGBB` (for example `0xFF8000`).
+They override the remembered slider indices, regardless of file ordering.
+Older files without RGB entries retain their palette-derived colors; saving
+settings writes the resolved RGB entries. Manual RGB values load unchanged,
+even when the secondary color is unlocked.
+
+Click the setup value field for **Simple Gauge Color** or **Main values color**
+to freeze the secondary color. The field displays `(#RRGGBB)` in that color;
+moving the slider changes only the primary color. Click again to unlock and
+immediately restore automatic secondary coloring. Simple gauge uses RGB
+inversion; main values use complementary hue, or inverted gray brightness
+(white/white at the default). One shared runtime-only lock is released when
+another setting is selected or Setup is left, without changing the chosen RGB
+colors. The lock is never saved; the five RGB colors use the normal save workflow.
+
+Some other settings may also have the value freeze functionality to allow two values edited from teh same setup page. On **Shift light setpoint** tapping the value field locks teh setup value to allow  **shiftLightOverlimit** to be adjusted with the slider
+
+
 ### Live setup in the browser
 
 Enable **Web Config Server**, open the configuration address shown on the gauge,
 then choose **Live setup** in the top header (or open `/live-setup` directly).
+
+<img width="800" height="731" alt="M-Gauge_web_configuration2_larger" src="https://github.com/user-attachments/assets/c0d5d24f-55ca-4453-a745-922d92bad991" />
 
 The separate page mirrors the physical setup dropdown and slider, including
 board-specific options, colors, temporary value locks and ESP-NOW pairing.
