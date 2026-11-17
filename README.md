@@ -1148,9 +1148,196 @@ ERROR:12,text=Coolant temperature sensor fault
 
 Restart M-Gauge after replacing `canmap.conf` so the new mapping is loaded.
 
-**Short teaser video below**
+# M-Gauge CAN-Bus messages
 
-[VIDEO of M-Gauge features](https://flic.kr/p/2snAxms)
+M-Gauge receives ECU telemetry and external display commands, and transmits
+brightness synchronization and touchscreen button events. ECU telemetry is
+configured in `canmap.conf`; the display/button protocol below is built into
+the current ESP-IDF firmware.
+
+## Before you start
+
+- Enable **CAN Bus Link**, select the correct CAN RX/TX pins, and match the
+  vehicle's bitrate using `SPEED:` in `canmap.conf`.
+- Make sure the `FILTER:` setting admits both your ECU messages and the
+  M-Gauge command IDs. Reboot after changing bitrate, filter or CAN pins.
+- Use a suitable CAN transceiver and correct bus termination. The LCD4 board
+  already includes a transceiver; the round AMOLED boards require one for a
+  physical CAN connection.
+
+M-Gauge control and button messages use **standard 11-bit Classical CAN data
+frames**, not CAN FD or remote-request frames. Byte numbering starts at zero.
+All CAN IDs and payload bytes below are hexadecimal unless stated otherwise.
+
+## Gauge addressing
+
+The **Gauge CAN ID** setting selects the base CAN ID. The **Gauge ID** is added
+to it to obtain that gauge's actual CAN ID:
+
+```text
+Actual CAN ID = base CAN ID + Gauge ID
+```
+
+For example, base `0x500` and Gauge IDs 0, 1 and 2 give actual IDs `0x500`,
+`0x501` and `0x502`. Use the actual ID shown in the gauge's setup page or web
+header. Do not assume every installation uses `0x500`.
+
+The shipped `setup.conf` uses this example base and enables CAN:
+
+```text
+SETTING:gaugeId:0
+SETTING:gaugeCanId:0x500
+SETTING:gaugeCount:4
+SETTING:canBusLink:1
+```
+
+`gaugeCanId` in the file is the **base**; the running firmware adds `gaugeId`.
+
+## Messages M-Gauge receives
+
+### ECU telemetry
+
+There is no single fixed ECU data format. Define each measurement with
+`SIGNAL:` and each on/off status with `BIT:` in `canmap.conf`. These select
+the CAN ID, bit position, encoding and scaling used by M-Gauge.
+
+For example, this receives engine speed from the first two bytes of `0x520`:
+
+```text
+SPEED:500KBITS
+FILTER:id=0x500,mask=0x700,extended=0
+SIGNAL:0,id=0x520,startBit=0,bitLength=16,endian=little,signed=0,factor=1,offset=0,scaling=1,min=0,max=8000,alarmLimitMin=0,alarmLimit=7000,alarmSource=0,name=RPM|Engine speed
+```
+
+An ECU frame beginning `AC 0D` represents 3500 RPM (`0x0DAC`, little-endian).
+Select that signal from the gauge's favorites list to display it. The example
+filter admits standard IDs `0x500`–`0x5FF`; adapt it for your own CAN network.
+
+### Display commands
+
+These commands need at least two payload bytes. Sending the two-byte frames
+shown here is sufficient; trailing bytes are not required.
+
+| Function | Byte 0 | Byte 1 | Accepted CAN ID |
+| --- | --- | --- | --- |
+| Set brightness | `01` | Brightness, 0–255 decimal | Own actual ID or another ID in the configured gauge group |
+| Select screen | `03` | Screen index, 0–7 decimal | Own actual ID only |
+| Select displayed signal | `04` | Signal index from `canmap.conf` | Own actual ID only |
+
+**Brightness:** the group covers `base ID` through `base ID + gaugeCount - 1`.
+The gauge's own actual ID is also accepted, including a single-gauge setup.
+Brightness is therefore a group synchronization command, not necessarily an
+individual-only adjustment: other gauges accepting the same group ID will
+change too. Normal brightness is clamped to a minimum of 10 on AMOLED boards
+and 15 on LCD4; `00` does not turn the display fully off. A received CAN
+brightness command is not retransmitted onto CAN, preventing echo loops.
+
+**Screen selection:** indices are zero-based and do not match the source
+filenames:
+
+| Byte 1 | Screen |
+| --- | --- |
+| `00` | Single needle |
+| `01` | Dual needle |
+| `02` | Needle + status/indicators |
+| `03` | Multi-value/bar display |
+| `04` | Chart |
+| `05` | Simple gauge |
+| `06` | Setup |
+| `07` | CAN-button page |
+
+**Signal selection:** changes the first display slot of the currently active
+gauge screen (screen indices 0–5). The index is the `SIGNAL:` or `INTERNAL:`
+index, not a CAN ID or a position in the favorites list. It does not change
+the other slots on a multi-value screen and is ignored on setup/button pages.
+Screen and signal commands require the graphical UI; they have no display
+effect in headless mode. These commands do not themselves save `setup.conf`.
+
+Examples for a gauge whose actual CAN ID is `0x500`:
+
+```text
+CAN ID   DLC   Data          Result
+0x500     2    01 B4         Set brightness to 180 decimal
+0x500     2    03 05         Open the simple-gauge screen
+0x500     2    04 39         Select signal 57 in its first slot
+```
+
+Send the screen-selection command before selecting its signal. Use `0x501`
+instead to address Gauge ID 1 when the base is `0x500`.
+
+## Messages M-Gauge sends
+
+Outgoing frames use the sender's **actual CAN ID**.
+
+| Message | DLC | Payload | When sent |
+| --- | --- | --- | --- |
+| Brightness synchronization | 2 | `01 BB` | Local brightness changes, after approximately 300 ms of debounce |
+| Button event | 3 | `EE 00 01` | Immediately on press, then approximately every 100 ms while held |
+
+`BB` is the brightness byte. `EE` is the configured button event value.
+**The button event value is byte 0, not the frame's CAN identifier.**
+All five touchscreen buttons use this same frame format:
+
+| Button | `setup.conf` setting |
+| --- | --- |
+| Dedicated CAN-button page | `buttonPressedCanEventId` |
+| Button 1 | `buttonButton1CanEventId` |
+| Button 2 | `buttonButton2CanEventId` |
+| Button 3 | `buttonButton3CanEventId` |
+| Button 4 | `buttonButton4CanEventId` |
+
+For example, setting `buttonButton1CanEventId` to **16 decimal** produces:
+
+```text
+CAN ID   DLC   Data
+0x500     3    10 00 01
+```
+
+Configure the receiving ECU/controller to match the CAN ID and byte 0, then
+read byte 2 as the asserted button value. **No release/zero frame is sent.**
+For a momentary function, use a receiver timeout longer than the 100 ms repeat
+interval, such as 300 ms. For a toggle, detect a new press instead of toggling
+on every repeated frame. Validate the timeout with your network and application.
+
+Use distinct event values for distinct buttons. Setting a Button 1–4 event
+value to zero disables its button action; it can still serve as a BIT indicator.
+
+> Reserve event values `01`, `03` and `04` for built-in display commands.
+> Reusing them for buttons can unintentionally dim or change another gauge,
+> because command receivers also inspect byte 0. Values 16–19 decimal
+> (`10`–`13` hex), for example, avoid these built-in command values.
+
+The dedicated button's default event value is `02`.
+
+## Using buttons through ESP-NOW
+
+An ESP-NOW client sends its button event wirelessly to its host. The host
+transmits the same three-byte button frame onto CAN, using the **host's actual
+CAN ID**, not the client's ID. Enable CAN Bus Link on the host and configure
+the ECU/controller to receive from the host's ID.
+
+A host can forward received ECU CAN frames to paired clients. Brightness also
+has dedicated ESP-NOW synchronization. However, forwarding a raw CAN frame
+does **not** make clients execute the CAN screen/signal commands above; those
+commands are handled on the physical CAN receive path.
+
+## Practical notes
+
+- Avoid assigning a gauge's transmit ID to an unrelated ECU message. Keep
+  control/button traffic distinct from telemetry definitions.
+- The display commands have no dedicated CAN acknowledgement or reply frame.
+- Normal web-configuration maintenance pauses physical CAN processing. Turn
+  it off/reboot before CAN testing. Headless gateway mode keeps telemetry
+  active, except during OTA updates; demo mode suspends the physical CAN link.
+- `INTERNAL:` inputs are not automatically broadcast onto physical CAN.
+  The source includes a six-byte accelerometer transmit helper
+  (`00 00 00 XX YY ZZ`, signed 8-bit axis fields), but the current runtime does
+  not call it, so it is not an enabled periodic CAN telemetry feature.
+- Buttons send a fixed event frame, not an arbitrary configurable CAN payload.
+  Your ECU/controller must be configured to interpret it. Do not use this
+  interface as a substitute for safety-critical vehicle controls.
+
+---
 
 
 
@@ -1183,6 +1370,12 @@ you want to retain the usual STA ESP-NOW MAC while using the temporary web AP.
 (saved/configured mode differs from this boot). To restore graphics, save
 `SETTING:headlessMode:0` and power-cycle/reboot. A reboot is required; turning
 off the web server is intentionally unavailable while running headless.
+
+
+
+### M-Gauge features (OLD)
+**Short teaser video below**
+[VIDEO of M-Gauge features](https://flic.kr/p/2snAxms)
 
 
 
