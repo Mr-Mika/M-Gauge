@@ -1,10 +1,13 @@
 
+
 # M-Gauge
 
-**M-Gauge** is a customizable digital gauge display for land based vehicles, designed to present engine and vehicle information clearly, efficiently, and with style. M-Gauge renders configurable gauge screens, receives ECU data over CAN bus, supports user configurable favorites/settings and custom background images  stored internally, includes optional WiFi, Web configuration utility, and ESP-NOW wireless gauge feature.
-<img width="1054" height="136" alt="M-Gauge_githun_header_2" src="https://github.com/user-attachments/assets/7ec34bf1-8416-477b-9aca-12d3db672f73" />
+**M-Gauge** is a, customizable digital gauge display for land based vehicles, designed to present engine and vehicle information clearly, efficiently, and with style. M-Gauge renders user configurable gauge screens, receives ECU data over CAN bus, supports user configurable favorites/settings, colors and custom background images, includes WiFi Web configuration utility, and ESP-NOW wireless gauge features.
 
-3 development board displays are supported:
+<img width="1000" height="333" alt="Neon M-GAUGE Throttle Display_width_1000" src="https://github.com/user-attachments/assets/92e8cce5-69ea-456b-bab2-8937b0121368" />
+
+
+3 development board displays are currently supported:
 
 The original **LilyGO T-Display S3 AMOLED 1.75" round display** featuring an **ESP32-S3 microcontroller**
 * https://lilygo.cc/products/t-display-s3-amoled-1-64
