@@ -1,10 +1,6 @@
-
-
-# M-Gauge
+<img width="1000" height="333" alt="Neon M-GAUGE Throttle Display_width_1000" src="https://github.com/user-attachments/assets/d0df9929-8ea4-4fb9-8bdb-b4adab5daf6d" />
 
 **M-Gauge** is a, customizable digital gauge display for land based vehicles, designed to present engine and vehicle information clearly, efficiently, and with style. M-Gauge renders user configurable gauge screens, receives ECU data over CAN bus, supports user configurable favorites/settings, colors and custom background images, includes WiFi Web configuration utility, and ESP-NOW wireless gauge features.
-
-<img width="1000" height="333" alt="Neon M-GAUGE Throttle Display_width_1000" src="https://github.com/user-attachments/assets/d0df9929-8ea4-4fb9-8bdb-b4adab5daf6d" />
 
 
 
