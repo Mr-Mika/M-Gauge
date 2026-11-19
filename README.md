@@ -25,15 +25,14 @@ Updated firmware binary for Waveshare boards available in the firmware download 
 2. Waveshare boards DO NOT currently have tested and functional enclosure!! ONLY the LilyGo board has a 3D-printed enclosure currently available!! 
 ___
 
-
 # M-Gauge 2.0 is here! — More than just a gauge
 M-Gauge 2.0 brings together new and exciting features: deeper visual customization, more onboard sensor inputs, a redesigned browser interface, display-free gateway operation, and more capable wireless ESP-NOW gauge networks.
 
-https://github.com/Mr-Mika/M-Gauge/tree/main/Firmware/M-Gauge%202.0
+<img width="1000" height="333" alt="Neon Multi-Gauge Dashboard 2 0_w1000" src="https://github.com/user-attachments/assets/4674d0fa-216e-4402-86a5-bbc2611a0d86" />
 
 Whether you want one personalized instrument or several linked displays sharing a single CAN connection, this release gives you more control over how your M-Gauge system looks and works.
 
-<img width="300" height="300" alt="M-Gauge_2_screens1" src="https://github.com/user-attachments/assets/28b9b08f-288b-4ee6-833d-9ca63ae1c896" /><img width="300" height="300" alt="M-Gauge_2_screens2" src="https://github.com/user-attachments/assets/6ec3baa1-3cce-474c-948c-dfe3533fdbb7" /><img width="300" height="300" alt="M-Gauge_2_screens3" src="https://github.com/user-attachments/assets/fee4f08c-9411-4bb4-a5e4-436c1f88090f" />
+https://github.com/Mr-Mika/M-Gauge/tree/main/Firmware/M-Gauge%202.0
 
 ## Native ESP-IDF and expanded hardware support
 
@@ -57,28 +56,6 @@ Hardware-specific features depend on the fitted sensors and selected board profi
 
 Some advanced layout and geometry options are edited through `setup.conf`; everyday settings remain accessible from the gauge and Live setup.
 
-## A new web configuration experience
-
-The browser interface has a black-and-gold/bronze design, responsive controls, and firmware-version information in the page headers.
-
-<img width="400" height="600" alt="M-Gauge_web_configuration1" src="https://github.com/user-attachments/assets/c48aa7cb-5b49-43b8-86d2-16e37299bc37" />
-
-The main configuration page lets you:
-
-- Load, edit and save `canmap.conf` and `setup.conf`.
-- Upload custom images, with format, dimension and file-size checks before activation.
-- View and download supported drag-performance SD logs.
-- Install application-only OTA firmware updates while preserving configuration and LittleFS files.
-
-### Live setup — adjust the gauge from your browser
-
-A separate **Live setup** page mirrors the supported setup dropdown and slider controls. Change settings in real time, preview color selections, use temporary value locks, and save your changes without editing configuration text.
-
-<img width="400" height="366" alt="M-Gauge_web_configuration2" src="https://github.com/user-attachments/assets/62ad6166-66ee-4282-ad27-7e02857e87c4" />
-
-The ESP-NOW section shows the configured mode, saved host, registered clients and pairing status. Enable or disable ESP-NOW, change its role, start pairing, and start or stop demo mode remotely.
-
-Live setup provides live configuration controls and device status; it is not a streamed mirror of the gauge display or a live telemetry chart.
 
 ## Expanded ESP-NOW networking
 
@@ -110,6 +87,38 @@ Use them as buttons, status indicators, or both:
 
 Updated CAN control handling also supports brightness, screen-selection and displayed-signal commands addressed to the gauge itself, while avoiding brightness retransmission loops.
 
+## A new web configuration experience
+
+The browser interface has a black-and-gold/bronze design, responsive controls, and firmware-version information in the page headers.
+
+<img width="400" height="600" alt="M-Gauge_web_configuration1" src="https://github.com/user-attachments/assets/c48aa7cb-5b49-43b8-86d2-16e37299bc37" />
+
+The main configuration page lets you:
+
+- Load, edit and save `canmap.conf` and `setup.conf`.
+- Upload custom images, with format, dimension and file-size checks before activation.
+- View and download supported drag-performance SD logs.
+- Install application-only OTA firmware updates while preserving configuration and LittleFS files.
+
+### Live setup — adjust the gauge from your browser
+
+A separate **Live setup** page mirrors the supported setup dropdown and slider controls. Change settings in real time, preview color selections, use temporary value locks, and save your changes without editing configuration text.
+
+<img width="400" height="366" alt="M-Gauge_web_configuration2" src="https://github.com/user-attachments/assets/62ad6166-66ee-4282-ad27-7e02857e87c4" />
+
+The ESP-NOW section shows the configured mode, saved host, registered clients and pairing status. Enable or disable ESP-NOW, change its role, start pairing, and start or stop demo mode remotely.
+
+Live setup provides live configuration controls and device status; it is not a streamed mirror of the gauge display or a live telemetry chart.
+
+## More flexible signals, warnings and testing
+
+- Optional **`smoothingMs`** on CAN and internal signals steadies noisy values such as fuel level. Missing or zero leaves smoothing disabled, and raw telemetry remains unchanged.
+- Shared value formatting improves consistent scaling, signed values and decimal precision across screens.
+- Conditional **`VALUE:` and `UNIT:`** text overrides, linked unit conditions and configurable **`ERROR:`** descriptions make status messages more adaptable.
+- Expanded alarm/status displays, selectable shift-light sources and a separately adjustable **Shift Light Overlimit** threshold give more control over warnings.
+- Supported internal inputs include GPIO digital/analog measurements and external **INA226 bus-voltage monitoring**, with user-defined scaling.
+- A driving-like demo replaces repetitive min/max sweeps with smooth acceleration, deceleration, coasting and partial-range reversals. Demo data can also be sent to wireless clients, including from a headless node.
+
 ## Accelerometer inputs and drag performance
 
 On supported motion-sensor hardware, accelerometer and gyroscope axes can be configured as `INTERNAL:` signals and selected for display like ECU parameters. Scaling, offsets, zero calibration and the usual signal limits allow these inputs to be adapted to the installation. Enabled internal inputs can also be selected as the shift-light source.
@@ -132,15 +141,6 @@ Choose Full Range, Bass, Midrange, Treble or a Custom frequency band. Custom low
 
 Microphone capture is demand-driven, and frequency analysis runs only when its output is needed. This avoids spending processing resources on unused audio inputs. Sound intensity is a relative level, not a calibrated sound-pressure reading in dB SPL.
 
-## More flexible signals, warnings and testing
-
-- Optional **`smoothingMs`** on CAN and internal signals steadies noisy values such as fuel level. Missing or zero leaves smoothing disabled, and raw telemetry remains unchanged.
-- Shared value formatting improves consistent scaling, signed values and decimal precision across screens.
-- Conditional **`VALUE:` and `UNIT:`** text overrides, linked unit conditions and configurable **`ERROR:`** descriptions make status messages more adaptable.
-- Expanded alarm/status displays, selectable shift-light sources and a separately adjustable **Shift Light Overlimit** threshold give more control over warnings.
-- Supported internal inputs include GPIO digital/analog measurements and external **INA226 bus-voltage monitoring**, with user-defined scaling.
-- A driving-like demo replaces repetitive min/max sweeps with smooth acceleration, deceleration, coasting and partial-range reversals. Demo data can also be sent to wireless clients, including from a headless node.
-
 ## Headless mode — a dedicated CAN-to-wireless gateway
 
 M-Gauge can now operate without a display as a **headless node**. One unit connects to the vehicle CAN bus and forwards data to the gauges in your ESP-NOW network.
@@ -151,7 +151,6 @@ Normal CAN processing and ESP-NOW forwarding continue while browsing in headless
 
 Enable `SETTING:headlessMode:1` in `setup.conf` and reboot. Set it back to `0` and reboot to restore display operation.
 - This mode allow user to run M-Gauge 2.0 in basically any EPS32-S3-16-8 Board, and use it as a wireless gateway to supported M-Gauge displays.
-
 
 **M-Gauge 2.0 combines a customizable instrument, a sensor display, a wireless CAN gateway and a browser-managed gauge network in one firmware platform.**
 
