@@ -131,13 +131,19 @@ The **Waveshare round drag performance meter** adds:
 - An adjustable acceleration calibration factor.
 - Optional **100 ms SD logging**, including acceleration, performance values and a results summary. Up to 100 rotating log files can be opened or downloaded through web configuration.
 
-These are accelerometer-derived estimates, not a replacement for track timing. Mounting, vehicle pitch, vibration and sensor bias affect the results; compare and calibrate against reference measurements.
+<img width="700" height="525" alt="M-Gauge_Drag_mode" src="https://github.com/user-attachments/assets/b23187f2-af1f-42e8-9cbb-51714d663195" />
+
+
+
+These are accelerometer-derived estimates, not a replacement for track timing. Mounting, vehicle pitch, vibration and sensor bias may affect the results; compare and calibrate against reference measurements.
 
 ## Microphone intensity and frequency inputs
 
 The Waveshare round board's dual microphones can now supply **sound intensity** and **dominant frequency** as selectable `INTERNAL:` signals.
 
 Choose Full Range, Bass, Midrange, Treble or a Custom frequency band. Custom low- and high-cut settings let you focus on a particular part of the sound spectrum, and the selected filtering also affects the intensity measurement.
+
+<img width="700" height="525" alt="M-Gauge_microphone_input" src="https://github.com/user-attachments/assets/ea8e73c0-1fb1-4164-bfe2-50946a8e8a02" />
 
 Microphone capture is demand-driven, and frequency analysis runs only when its output is needed. This avoids spending processing resources on unused audio inputs. Sound intensity is a relative level, not a calibrated sound-pressure reading in dB SPL.
 
