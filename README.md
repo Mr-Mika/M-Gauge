@@ -1,3 +1,11 @@
+**SEARCHING for individuals to test software with Waveshare 2.8" Round screen!!**
+
+New supported board has been added. If you have a waveshare 2.8C development board 
+
+https://www.waveshare.com/esp32-s3-touch-lcd-2.8c.htm 
+
+and would like to test M-Gauge, contact using the issues tab here on Github
+
 <img width="1000" height="333" alt="Neon M-GAUGE Throttle Display_width_1000" src="https://github.com/user-attachments/assets/d0df9929-8ea4-4fb9-8bdb-b4adab5daf6d" />
 
 **M-Gauge** is a, customizable digital gauge display for land based vehicles, designed to present engine and vehicle information clearly, efficiently, and with style. M-Gauge renders user configurable gauge screens, receives ECU data over CAN bus, supports user configurable favorites/settings, colors and custom background images, includes WiFi Web configuration utility, and ESP-NOW wireless gauge features.
@@ -18,7 +26,7 @@ Waveshare ESP32-S3 LCD4 is basically plug and play for automotive use, no solder
 * Not as good readability in direct sunlight as on the other boards, and generally not as nice display as AMOLED, also slightly slower performance. 
 * https://www.waveshare.com/esp32-s3-touch-lcd-4.htm
 
-Updated firmware binary for Waveshare boards available in the firmware download section
+
 
 **NOTE!** 
 1. When ordering Waveshare boards make sure to select version with **touch display** 
